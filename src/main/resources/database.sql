@@ -70,8 +70,7 @@ CREATE TABLE PresentacionLote(
 
 # tabla con informacion de proveedores
 CREATE TABLE Proveedor(
-	nombre VARCHAR(70) PRIMARY KEY,
-    saldo DECIMAL(12,2) UNSIGNED DEFAULT 0.0 NOT NULL
+	nombre VARCHAR(70) PRIMARY KEY
 );
 
 # tabla para relacionar los proveedores con los productos
