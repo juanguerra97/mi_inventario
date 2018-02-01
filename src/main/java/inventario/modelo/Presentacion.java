@@ -2,6 +2,9 @@ package inventario.modelo;
 
 import java.io.Serializable;
 
+import inventario.modelo.error.EmptyArgumentException;
+import inventario.modelo.error.ModelConstraintViolationException;
+
 /**
  * Clase para crear objectos que representen una presentacion de un producto
  * @author juang
@@ -16,10 +19,12 @@ public class Presentacion implements Serializable {
 	
 	/**
 	 * Constructor
-	 * @param idProducto
-	 * @param nombre
+	 * @param idProducto numero de identificacion del producto al que pertenece la presentacion
+	 * @param nombre nombre de la presentacion, no puede ser null
+	 * @throws ModelConstraintViolationException si el ID del producto es menor o igual a cero
+	 * @throws EmptyArgumentException si el nombre de la presentacion esta vacio
 	 */
-	public Presentacion(long idProducto, String nombre) {
+	public Presentacion(long idProducto, String nombre) throws ModelConstraintViolationException, EmptyArgumentException {
 		setIdProducto(idProducto);
 		setNombre(nombre);
 	}
@@ -32,10 +37,12 @@ public class Presentacion implements Serializable {
 	
 	/**
 	 * Establece el id de identificacion del producto al que pertenece la presentacion
-	 * @param id numero de identificacion del producto, debe ser mayor a cero
+	 * @param id numero de identificacion del producto al que pertenece la presentacion
+	 * @throws ModelConstraintViolationException si el ID del producto es menor o igual a cero
 	 */
-	public void setIdProducto(long idProducto) {
-		assert idProducto > 0 : "El ID del producto debe ser mayor a cero";
+	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
+		if(idProducto <= 0)
+			throw new ModelConstraintViolationException("El ID del producto debe ser mayor a cero");
 		this.idProducto = idProducto;
 	}
 	
@@ -47,11 +54,13 @@ public class Presentacion implements Serializable {
 	
 	/**
 	 * Establece el nombre de la presentacion
-	 * @param nombre nombre de la presentacion, no puede ser null o estar vacio
+	 * @param nombre nombre de la presentacion, no puede ser null
+	 * @throws EmptyArgumentException si el nombre de la presentacion esta vacio
 	 */
-	public void setNombre(String nombre) {
+	public void setNombre(String nombre) throws EmptyArgumentException {
 		assert nombre != null : "El nombre de la presentacion no puede ser null";
-		assert !nombre.isEmpty() : "El nombre de la presentacion no puede estar vacio";
+		if(nombre.isEmpty())
+			throw new EmptyArgumentException("El nombre de la presentacion no puede estar vacio");
 		this.nombre = nombre;
 	}
 	

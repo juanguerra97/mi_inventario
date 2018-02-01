@@ -4,30 +4,32 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import inventario.modelo.error.EmptyArgumentException;
+import inventario.modelo.error.ModelConstraintViolationException;
+
 public class TestPresentacion {
 
 	@Test
-	public void testPresentacion() {
+	public void testConstructor() throws ModelConstraintViolationException, 
+										EmptyArgumentException {
 		new Presentacion(1,"LIBRA"); // argumentos validos
 	}
 	
-	@Test(expected = AssertionError.class)
-	public void testPresentacion2() {
+	@Test(expected = ModelConstraintViolationException.class)
+	public void testBadIDProducto() throws ModelConstraintViolationException, 
+										EmptyArgumentException {
 		new Presentacion(0,"NOMBRE");// id de producto invalido
 	}
 	
-	@Test(expected = AssertionError.class)
-	public void testPresentacion3() {
-		new Presentacion(1,null);// nombre de presentacion invalido
-	}
-	
-	@Test(expected = AssertionError.class)
-	public void testPresentacion4() {
+	@Test(expected = EmptyArgumentException.class)
+	public void testPresentacion4() throws ModelConstraintViolationException, 
+										EmptyArgumentException {
 		new Presentacion(1,"");// nombre de presentacion invalido
 	}
 
 	@Test
-	public void testEquals() {
+	public void testEquals() throws ModelConstraintViolationException, 
+										EmptyArgumentException {
 		Presentacion p1 = new Presentacion(1,"LATA");
 		Presentacion p2 = new Presentacion(2,"LATA");
 		Presentacion p3 = new Presentacion(1,"LITRO");
