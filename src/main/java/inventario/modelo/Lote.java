@@ -3,6 +3,8 @@ package inventario.modelo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import inventario.modelo.error.ModelConstraintViolationException;
+
 /**
  * Clase para crear los lotes que pertenecen a un producto.
  * @author juang
@@ -18,11 +20,12 @@ public class Lote implements Serializable {
 	
 	/**
 	 * Constructor
-	 * @param idProducto numero de identificacion del producto al que pertenece el lote, debe ser mayor a cero
-	 * @param numero numero de lote, debe ser mayor a cero
+	 * @param idProducto numero de identificacion del producto al que pertenece el lote
+	 * @param numero numero de lote
 	 * @param fechaVencimiento fecha de vencimiento de los productos en este lote, si no hay fecha vencimiento se debe pasar null como argumento
+	 * @throws ModelConstraintViolationException si el ID del producto o el numero de lote son menor o igual a cero
 	 */
-	public Lote(long idProducto, long numero, LocalDate fechaVencimiento) {
+	public Lote(long idProducto, long numero, LocalDate fechaVencimiento) throws ModelConstraintViolationException {
 		setIdProducto(idProducto);
 		setNumero(numero);
 		setFechaVencimiento(fechaVencimiento);
@@ -30,10 +33,11 @@ public class Lote implements Serializable {
 	
 	/**
 	 * Constructor
-	 * @param idProducto numero de identificacion del producto al que pertenece el lote, debe ser mayor a cero
-	 * @param numero numero de lote, debe ser mayor a cero
+	 * @param idProducto numero de identificacion del producto al que pertenece el lote
+	 * @param numero numero de lote
+	 * @throws ModelConstraintViolationException si el ID del producto o el numero de lote son menor o igual a cero
 	 */
-	public Lote(long idProducto, long numero) {
+	public Lote(long idProducto, long numero) throws ModelConstraintViolationException {
 		this(idProducto, numero, null);// llamada al constructor que recibe todos los atributos con la fecha = null
 	}
 
@@ -45,10 +49,12 @@ public class Lote implements Serializable {
 	
 	/**
 	 * Establece el id de identificacion del producto al que pertenece el lote
-	 * @param id numero de identificacion del producto al que pertenece el lote, debe ser mayor a cero
+	 * @param id numero de identificacion del producto al que pertenece el lote
+	 * @throws ModelConstraintViolationException si el ID es menor o igual a cero
 	 */
-	public void setIdProducto(long idProducto) {
-		assert idProducto > 0 : "El ID del producto debe ser mayor a cero";
+	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
+		if(idProducto <= 0)
+			throw new ModelConstraintViolationException("El ID del producto debe ser mayor a cero");
 		this.idProducto = idProducto;
 	}
 	
@@ -59,11 +65,13 @@ public class Lote implements Serializable {
 	public long getNumero() {return numero;}
 	
 	/**
-	 * Establece el numero de lote
-	 * @param numero numero de lote, debe ser mayor a cero
+	 * Establece el numero del lote
+	 * @param numero numero del lote
+	 * @throws ModelConstraintViolationException si el numero de lote es menor o igual a cero
 	 */
-	public void setNumero(long numero) {
-		assert numero > 0 : "El numero de lote debe ser mayor a cero";
+	public void setNumero(long numero) throws ModelConstraintViolationException {
+		if(numero <= 0)
+			throw new ModelConstraintViolationException("El numero de lote debe ser mayor a cero");
 		this.numero = numero;
 	}
 	
