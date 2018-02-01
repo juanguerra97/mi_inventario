@@ -2,6 +2,9 @@ package inventario.modelo;
 
 import java.io.Serializable;
 
+import inventario.modelo.error.EmptyArgumentException;
+import inventario.modelo.error.ModelConstraintViolationException;
+
 /**
  * Clase para crear objetos con informacion de un producto.
  * @author juang
@@ -17,11 +20,13 @@ public class Producto implements Serializable {
 	
 	/**
 	 * Constructor	
-	 * @param id numero de identificacion del producto, debe ser mayor a cero
-	 * @param nombre nombre del producto, no puede ser null o estar vacio
-	 * @param marca marca del producto, no puede ser null o estar vacia
+	 * @param id numero de identificacion del producto
+	 * @param nombre nombre del producto, no puede ser null
+	 * @param marca marca del producto, no puede ser null
+	 * @throws ModelConstraintViolationException si el ID es menor o igual a cero
+	 * @throws EmptyArgumentException si el nombre o la marca estan vacios
 	 */
-	public Producto(long id, String nombre, String marca) {
+	public Producto(long id, String nombre, String marca) throws ModelConstraintViolationException, EmptyArgumentException {
 		setId(id);
 		setNombre(nombre);
 		setMarca(marca);
@@ -29,10 +34,11 @@ public class Producto implements Serializable {
 	
 	/**
 	 * Constructor
-	 * @param nombre nombre del producto, no puede ser null o estar vacio
-	 * @param marca marca del producto, no puede ser null o estar vacia
+	 * @param nombre nombre del producto, no puede ser null
+	 * @param marca marca del producto, no puede ser null
+	 * @throws EmptyArgumentException si el nombre o la marca estan vacios
 	 */
-	public Producto(String nombre,String marca) {
+	public Producto(String nombre,String marca) throws EmptyArgumentException {
 		setNombre(nombre);
 		setMarca(marca);
 		id = Long.MAX_VALUE;
@@ -47,9 +53,11 @@ public class Producto implements Serializable {
 	/**
 	 * Establece el numero que identifica al producto
 	 * @param id numero de identificacion del producto, debe ser mayor a cero
+	 * @throws ModelConstraintViolationException si el ID es menor o igual a cero
 	 */
-	public void setId(long id) {
-		assert id > 0 : "El ID debe ser mayor a cero";
+	public void setId(long id) throws ModelConstraintViolationException {
+		if(id <= 0)
+			throw new ModelConstraintViolationException("El ID debe ser mayor a cero");
 		this.id = id;
 	}
 	
@@ -61,11 +69,13 @@ public class Producto implements Serializable {
 	
 	/**
 	 * Establece el nombre del producto
-	 * @param nombre nombre del producto, no puede ser null o estar vacio
+	 * @param nombre nombre del producto, no puede ser null
+	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
-	public void setNombre(String nombre) {
+	public void setNombre(String nombre) throws EmptyArgumentException {
 		assert nombre != null : "El nombre no puede ser null";
-		assert !nombre.isEmpty() : "El nombre no puede estar vacio";
+		if(nombre.isEmpty())
+			throw new EmptyArgumentException("El nombre no puede estar vacio");
 		this.nombre = nombre;
 	}
 	
@@ -77,11 +87,13 @@ public class Producto implements Serializable {
 	
 	/**
 	 * Establece la marca del producto
-	 * @param marca marca del producto, no puede ser null o estar vacia
+	 * @param marca marca del producto, no puede ser null
+	 * @throws EmptyArgumentException si la marca esta vacia
 	 */
-	public void setMarca(String marca) {
+	public void setMarca(String marca) throws EmptyArgumentException {
 		assert marca != null : "La marca no puede ser null";
-		assert !marca.isEmpty() : "La marca no puede estar vacia";
+		if(marca.isEmpty())
+			throw new EmptyArgumentException("La marca no puede estar vacia");
 		this.marca = marca;
 	}
 	
