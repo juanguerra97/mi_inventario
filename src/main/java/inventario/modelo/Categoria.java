@@ -2,6 +2,8 @@ package inventario.modelo;
 
 import java.io.Serializable;
 
+import inventario.modelo.error.EmptyArgumentException;
+
 /**
  * Clase para crear categorias de productos
  * @author juang
@@ -15,9 +17,10 @@ public class Categoria implements Serializable {
 	
 	/**
 	 * Constructor
-	 * @param nombre nombre de la categoria, no debe ser null ni estar vacio
+	 * @param nombre nombre de la categoria, no debe ser null
+	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
-	public Categoria(String nombre) {
+	public Categoria(String nombre) throws EmptyArgumentException {
 		setNombre(nombre);
 	}
 
@@ -29,11 +32,13 @@ public class Categoria implements Serializable {
 
 	/**
 	 * Establece el nombre de la categoria
-	 * @param nombre nombre de la categoria, no debe ser null ni estar vacio
+	 * @param nombre nombre de la categoria, no debe ser null
+	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
-	public void setNombre(String nombre) {
+	public void setNombre(String nombre) throws EmptyArgumentException {
 		assert nombre != null : "El nombre de la categoria no puede ser null";
-		assert !nombre.isEmpty() : "El nombre de la categoria no puede estar vacio";
+		if(nombre.isEmpty())
+			throw new EmptyArgumentException("El nombre de la categoria no puede estar vacio");
 		this.nombre = nombre;
 	}
 	
