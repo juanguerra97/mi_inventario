@@ -8,6 +8,31 @@ import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
 
 public class TestProducto {
+	
+	@Test
+	public void testConstructor() throws ModelConstraintViolationException, 
+										EmptyArgumentException {
+		new Producto(1,"NARANJAS","EL NARANJERO");
+		new Producto("IDREPETIDO","REP");
+	}
+	
+	@Test(expected = ModelConstraintViolationException.class)
+	public void testBadID() throws ModelConstraintViolationException, 
+							EmptyArgumentException {
+		new Producto(0,"NARANJAS","EL NARANJERO");
+	}
+	
+	@Test(expected = EmptyArgumentException.class)
+	public void testBadNombre() throws ModelConstraintViolationException, 
+							EmptyArgumentException {
+		new Producto(1,"","EL NARANJERO");
+	}
+	
+	@Test(expected = EmptyArgumentException.class)
+	public void testBadMarca() throws ModelConstraintViolationException, 
+							EmptyArgumentException {
+		new Producto(1,"NARANJAS","");
+	}
 
 	@Test
 	public void testEquals() throws ModelConstraintViolationException, 
