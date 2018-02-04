@@ -1,7 +1,7 @@
 package inventario.modelo;
 
 import java.io.Serializable;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 
 /**
@@ -10,7 +10,7 @@ import inventario.modelo.error.EmptyArgumentException;
  *
  */
 public class Categoria implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	
 	private String nombre;
@@ -36,9 +36,9 @@ public class Categoria implements Serializable {
 	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
 	public void setNombre(String nombre) throws EmptyArgumentException {
-		assert nombre != null : "El nombre de la categoria no puede ser null";
+		assert nombre != null : STRINGS_MODELO.getString("error.nombre_categoria.null");
 		if(nombre.isEmpty())
-			throw new EmptyArgumentException("El nombre de la categoria no puede estar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nombre_categoria.empty"));
 		this.nombre = nombre;
 	}
 	

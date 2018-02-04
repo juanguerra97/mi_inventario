@@ -3,7 +3,7 @@ package inventario.modelo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.ModelConstraintViolationException;
 
 /**
@@ -57,7 +57,7 @@ public class Transaccion implements Serializable {
 	 */
 	public void setNumero(long numero) throws ModelConstraintViolationException {
 		if(numero <= 0)
-			throw new ModelConstraintViolationException("El numero debe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.num_transac"));
 		this.numero = numero;
 	}
 	
@@ -72,7 +72,7 @@ public class Transaccion implements Serializable {
 	 * @param fecha fecha de la transaccion, no debe ser null
 	 */
 	public void setFecha(LocalDate fecha) {
-		assert fecha != null : "La fecha no puede ser null";
+		assert fecha != null : STRINGS_MODELO.getString("error.date.null");
 		this.fecha = fecha;
 	}
 	
@@ -88,9 +88,9 @@ public class Transaccion implements Serializable {
 	 * @throws ModelConstraintViolationException si el valor es negativo
 	 */
 	public void setValor(BigDecimal valor) throws ModelConstraintViolationException {
-		assert valor != null : "El valor de la transaccion no debe ser null";
+		assert valor != null : STRINGS_MODELO.getString("error.val_transac.null");
 		if(valor.compareTo(new BigDecimal("0.00")) < 0)
-			throw new ModelConstraintViolationException("El valor de la transaccion no puede ser negativo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.val_trasac.neg"));
 		this.valor = valor;
 	}
 

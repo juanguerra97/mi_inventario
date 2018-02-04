@@ -2,7 +2,7 @@ package inventario.modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
 
@@ -59,7 +59,7 @@ public class PresentacionLote implements Serializable {
 	 */	
 	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
 		if(idProducto <= 0)
-			throw new ModelConstraintViolationException("El ID del producto debe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.id_producto"));
 		this.idProducto = idProducto;
 	}
 	
@@ -77,9 +77,9 @@ public class PresentacionLote implements Serializable {
 	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
 	public void setNombrePresentacion(String nombrePresentacion) throws EmptyArgumentException {
-		assert nombrePresentacion != null : "El nombre de la presentacion no puede ser null";
+		assert nombrePresentacion != null : STRINGS_MODELO.getString("error.nom_pres.null");
 		if(nombrePresentacion.isEmpty())
-			throw new EmptyArgumentException("El nombre de la presentacion no puede estar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nom_pres.empty"));
 		this.nombrePresentacion = nombrePresentacion;
 	}
 	
@@ -96,7 +96,7 @@ public class PresentacionLote implements Serializable {
 	 */
 	public void setNumeroLote(long numeroLote) throws ModelConstraintViolationException {
 		if(numeroLote <= 0)
-			throw new ModelConstraintViolationException("El numero de lote debe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.num_lote"));
 		this.numeroLote = numeroLote;
 	}
 	
@@ -114,7 +114,7 @@ public class PresentacionLote implements Serializable {
 	 */
 	public void setCantidad(int cantidad) throws ModelConstraintViolationException {
 		if(cantidad < 0)
-			throw new ModelConstraintViolationException("La cantidad debe ser un entero positivo o cero");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.cantidad.neg"));
 		this.cantidad = cantidad;
 	}
 	
@@ -132,11 +132,11 @@ public class PresentacionLote implements Serializable {
 	 * es mayor al precio
 	 */
 	public void setCosto(BigDecimal costo) throws ModelConstraintViolationException {
-		assert costo != null : "El costo no puede ser null";
+		assert costo != null : STRINGS_MODELO.getString("error.costo.null");
 		if(costo.compareTo(new BigDecimal("0.00")) < 0)
-			throw new ModelConstraintViolationException("El costo no puede ser negativo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.cantidad.neg"));
 		if(precio != null && (costo.compareTo(precio) > 0))
-			throw new ModelConstraintViolationException("El costo no puede ser mayor al precio");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.costo_gt_precio"));
 		this.costo = costo;
 	}
 	
@@ -154,11 +154,11 @@ public class PresentacionLote implements Serializable {
 	 * es menor al costo
 	 */
 	public void setPrecio(BigDecimal precio) throws ModelConstraintViolationException {
-		assert precio != null : "El precio no puede ser null";
+		assert precio != null : STRINGS_MODELO.getString("error.precio.null");
 		if(precio.compareTo(new BigDecimal("0.00")) < 0)
-			throw new ModelConstraintViolationException("El precio no puede ser negativo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.precio.neg"));
 		if(costo != null && (precio.compareTo(costo) < 0))
-			throw new ModelConstraintViolationException("El precio no puede ser menor al costo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.precio_lt_costo"));
 		this.precio = precio;
 	}
 	

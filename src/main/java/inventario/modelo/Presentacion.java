@@ -1,7 +1,7 @@
 package inventario.modelo;
 
 import java.io.Serializable;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
 
@@ -42,7 +42,7 @@ public class Presentacion implements Serializable {
 	 */
 	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
 		if(idProducto <= 0)
-			throw new ModelConstraintViolationException("El ID del producto debe ser mayor a cero");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.id_producto"));
 		this.idProducto = idProducto;
 	}
 	
@@ -58,9 +58,9 @@ public class Presentacion implements Serializable {
 	 * @throws EmptyArgumentException si el nombre de la presentacion esta vacio
 	 */
 	public void setNombre(String nombre) throws EmptyArgumentException {
-		assert nombre != null : "El nombre de la presentacion no puede ser null";
+		assert nombre != null : STRINGS_MODELO.getString("error.nom_pres.null");
 		if(nombre.isEmpty())
-			throw new EmptyArgumentException("El nombre de la presentacion no puede estar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nom_pres.empty"));
 		this.nombre = nombre;
 	}
 	

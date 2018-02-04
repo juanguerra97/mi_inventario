@@ -2,7 +2,7 @@ package inventario.modelo;
 
 import java.math.BigDecimal;
 import java.util.zip.DataFormatException;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
 import inventario.modelo.validacion.Validacion;
@@ -42,8 +42,7 @@ public class ItemVenta extends ItemTransaccion {
 		super(numeroTransaccion, idProducto, marcaProducto, presentacionProducto, 
 				loteProducto, valorUnitario, cantidad);
 		if(dpiCliente == null && nombreCliente == null)
-			throw new ModelConstraintViolationException("El DPI y el nombre del cliente "
-					+ "no pueden ser ambos null, debe proveer uno o los dos");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.dpi_nom_cliente.null"));
 		setDpiCliente(dpiCliente);
 		setNombreCliente(nombreCliente);
 	}
@@ -69,7 +68,7 @@ public class ItemVenta extends ItemTransaccion {
 			throws ModelConstraintViolationException, EmptyArgumentException, DataFormatException {
 		super(numeroTransaccion, idProducto, marcaProducto, presentacionProducto, 
 				loteProducto, valorUnitario, cantidad);
-		assert dpiCliente != null : "El DPI no puede ser null";
+		assert dpiCliente != null : STRINGS_MODELO.getString("error.dpi_cliente.null");
 		setDpiCliente(dpiCliente);
 		this.nombreCliente = null;
 	}
@@ -94,7 +93,7 @@ public class ItemVenta extends ItemTransaccion {
 			throws ModelConstraintViolationException, EmptyArgumentException {
 		super(numeroTransaccion, idProducto, marcaProducto, presentacionProducto, 
 				loteProducto, valorUnitario, cantidad);
-		assert nombreCliente != null : "El nombre del cliente no debe ser null";
+		assert nombreCliente != null : STRINGS_MODELO.getString("error.nombre_cliente.null");
 		setNombreCliente(nombreCliente);
 		this.dpiCliente = null;
 	}
@@ -115,9 +114,9 @@ public class ItemVenta extends ItemTransaccion {
 			throws EmptyArgumentException, DataFormatException {
 		if(dpiCliente != null)
 			if(dpiCliente.isEmpty())
-				throw new EmptyArgumentException("El DPI no puede quedar vacio");
+				throw new EmptyArgumentException(STRINGS_MODELO.getString("error.dpi_cliente.empty"));
 			else if(!dpiCliente.matches(Validacion.REGEX_DPI))
-				throw new DataFormatException("El formato del DPI no es valido");
+				throw new DataFormatException(STRINGS_MODELO.getString("error.dpi_cliente.format"));
 		this.dpiCliente = dpiCliente;
 	}
 
@@ -134,7 +133,7 @@ public class ItemVenta extends ItemTransaccion {
 	 */
 	private void setNombreCliente(String nombreCliente) throws EmptyArgumentException {
 		if(nombreCliente != null && nombreCliente.isEmpty())
-			throw new EmptyArgumentException("El nombre no puede quedar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nombre_cliente.empty"));
 		this.nombreCliente = nombreCliente;
 	}
 	

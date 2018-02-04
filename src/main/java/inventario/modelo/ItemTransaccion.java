@@ -2,14 +2,14 @@ package inventario.modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
 
 /**
  * Informacion general de un elemento de una transaccion
  * @author juang
- *
+ * 
  */
 public abstract class ItemTransaccion implements Serializable {
 
@@ -62,7 +62,7 @@ public abstract class ItemTransaccion implements Serializable {
 	 */ 
 	public void setNumeroTransaccion(long numeroTransaccion) throws ModelConstraintViolationException {
 		if(numeroTransaccion <= 0)
-			throw new ModelConstraintViolationException("El numero de transacciondebe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.num_transac"));
 		this.numeroTransaccion = numeroTransaccion;
 	}
 	
@@ -79,7 +79,7 @@ public abstract class ItemTransaccion implements Serializable {
 	 */
 	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
 		if(idProducto <= 0)
-			throw new ModelConstraintViolationException("El ID del producto debe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.id_producto"));
 		this.idProducto = idProducto;
 	}
 	
@@ -95,9 +95,9 @@ public abstract class ItemTransaccion implements Serializable {
 	 * @throws EmptyArgumentException si la marca esta vacia
 	 */
 	public void setMarcaProducto(String marcaProducto) throws EmptyArgumentException {
-		assert marcaProducto != null : "La marca no puede ser null";
+		assert marcaProducto != null : STRINGS_MODELO.getString("error.marca_producto.null");
 		if(marcaProducto.isEmpty())
-			throw new EmptyArgumentException("La marca no puede estar vacia");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.marca_producto.empty"));
 		this.marcaProducto = marcaProducto;
 	}
 	
@@ -113,9 +113,9 @@ public abstract class ItemTransaccion implements Serializable {
 	 * @throws EmptyArgumentException si la presentacion esta vacia
 	 */
 	public void setPresentacionProducto(String presentacionProducto) throws EmptyArgumentException {
-		assert presentacionProducto != null : "La presentacion no puede ser null";
+		assert presentacionProducto != null : STRINGS_MODELO.getString("error.nom_pres.null");
 		if(presentacionProducto.isEmpty())
-			throw new EmptyArgumentException("La presentacion no puede estar vacia");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nom_pres.empty"));
 		this.presentacionProducto = presentacionProducto;
 	}
 	
@@ -132,7 +132,7 @@ public abstract class ItemTransaccion implements Serializable {
 	 */
 	public void setLoteProducto(long loteProducto) throws ModelConstraintViolationException {
 		if(loteProducto <= 0)
-			throw new ModelConstraintViolationException("El lote debe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.num_lote"));
 		this.loteProducto = loteProducto;
 	}
 	
@@ -148,9 +148,9 @@ public abstract class ItemTransaccion implements Serializable {
 	 * @throws ModelConstraintViolationException si el valor unitario es negativo
 	 */
 	public void setValorUnitario(BigDecimal valorUnitario) throws ModelConstraintViolationException {
-		assert valorUnitario != null : "El valor unitario no puede ser null";
+		assert valorUnitario != null : STRINGS_MODELO.getString("error.val_transac.null");
 		if(valorUnitario.compareTo(new BigDecimal("0.00")) < 0)
-			throw new ModelConstraintViolationException("El valor unitario no puede ser negativo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.val_trasac.neg"));
 		this.valorUnitario = valorUnitario;
 		setSubtotal();
 	}
@@ -168,7 +168,7 @@ public abstract class ItemTransaccion implements Serializable {
 	 */
 	public void setCantidad(int cantidad) throws ModelConstraintViolationException {
 		if(cantidad <= 0)
-			throw new ModelConstraintViolationException("La cantidad debe ser un entero positivo");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.cant_trasac"));
 		this.cantidad = cantidad;
 		setSubtotal();
 	}

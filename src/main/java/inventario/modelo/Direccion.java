@@ -1,14 +1,14 @@
 package inventario.modelo;
 
 import java.io.Serializable;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
 
 /**
  * Clase para crear direcciones
  * @author juang
- *
+ * 
  */
 public class Direccion implements Serializable {
 
@@ -28,14 +28,14 @@ public class Direccion implements Serializable {
 	 */
 	public Direccion(String departamento,String ciudad, byte zona) 
 			throws ModelConstraintViolationException, EmptyArgumentException {
-		assert ciudad != null : "La ciudad no puede ser null";
-		assert departamento != null : "El departamento no puede ser null";
+		assert ciudad != null : STRINGS_MODELO.getString("error.ciudad_dir.null");
+		assert departamento != null : STRINGS_MODELO.getString("error.dept_dir.null");
 		if(ciudad.isEmpty())
-			throw new EmptyArgumentException("La ciudad no puede quedar vacia");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.ciudad_dir.empty"));
 		if(departamento.isEmpty())
-			throw new EmptyArgumentException("El departamento no puede quedar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.dept_dir.emtpy"));
 		if(zona < 1 || zona > 50)
-			throw new ModelConstraintViolationException("Zona invalida, fuera de rango valido");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.zona_dir.range"));
 		this.ciudad = ciudad;
 		this.departamento = departamento;
 		this.zona = zona;

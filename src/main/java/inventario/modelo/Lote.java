@@ -2,7 +2,7 @@ package inventario.modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.ModelConstraintViolationException;
 
 /**
@@ -54,7 +54,7 @@ public class Lote implements Serializable {
 	 */
 	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
 		if(idProducto <= 0)
-			throw new ModelConstraintViolationException("El ID del producto debe ser mayor a cero");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.id_producto"));
 		this.idProducto = idProducto;
 	}
 	
@@ -71,7 +71,7 @@ public class Lote implements Serializable {
 	 */
 	public void setNumero(long numero) throws ModelConstraintViolationException {
 		if(numero <= 0)
-			throw new ModelConstraintViolationException("El numero de lote debe ser mayor a cero");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.num_lote"));
 		this.numero = numero;
 	}
 	

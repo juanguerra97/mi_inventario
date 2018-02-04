@@ -2,7 +2,7 @@ package inventario.modelo;
 
 import java.io.Serializable;
 import java.util.zip.DataFormatException;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.validacion.Validacion;
 
@@ -10,7 +10,7 @@ import inventario.modelo.validacion.Validacion;
  * Clase para representar a los clientes
  * @author juang
  *
- */
+ */ 
 public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -70,9 +70,9 @@ public class Cliente implements Serializable {
 	 * @throws DataFormatException si el DPI esta vacio o con un formato invalido
 	 */
 	public void setDpi(String dpi) throws DataFormatException {
-		assert dpi != null : "El DPI no puede ser null";
+		assert dpi != null : STRINGS_MODELO.getString("error.dpi_cliente.null");
 		if(!dpi.matches(Validacion.REGEX_DPI))
-			throw new DataFormatException("DPI invalido");
+			throw new DataFormatException(STRINGS_MODELO.getString("error.dpi_cliente.format"));
 		this.dpi = dpi;
 	}
 	
@@ -88,9 +88,9 @@ public class Cliente implements Serializable {
 	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
 	public void setNombre(String nombre) throws EmptyArgumentException {
-		assert nombre != null : "El nombre no puede ser null";
+		assert nombre != null : STRINGS_MODELO.getString("error.nombre_cliente.null");
 		if(nombre.isEmpty())
-			throw new EmptyArgumentException("El nombre del cliente no puede estar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nombre_cliente.empty"));
 		this.nombre = nombre;
 	}
 	
@@ -106,9 +106,9 @@ public class Cliente implements Serializable {
 	 * @throws EmptyArgumentException si el apellido esta vacio
 	 */
 	public void setApellido(String apellido) throws EmptyArgumentException {
-		assert apellido != null : "El apellido no puede ser null";
+		assert apellido != null : STRINGS_MODELO.getString("error.apellido_cliente.null");
 		if(apellido.isEmpty())
-			throw new EmptyArgumentException("El apellido del cliente no puede estar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.apellido_cliente.empty"));
 		this.apellido = apellido;
 	}
 	
@@ -124,9 +124,9 @@ public class Cliente implements Serializable {
 	 * @throws DataFormatException si el numero esta vacio o no es valido
 	 */
 	public void setTelefono(String telefono) throws DataFormatException {
-		assert telefono != null : "El telefono no puede ser null";
+		assert telefono != null : STRINGS_MODELO.getString("error.telefono.null");
 		if(!telefono.matches(Validacion.REGEX_TELEFONO))
-			throw new DataFormatException("Telefono invalido");
+			throw new DataFormatException(STRINGS_MODELO.getString("error.telefono.format"));
 		this.telefono = telefono;
 	}
 	
@@ -143,7 +143,7 @@ public class Cliente implements Serializable {
 	 */
 	public void setEmail(String email) throws DataFormatException {
 		if(email != null && !email.matches(Validacion.REGEX_EMAIL))
-			throw new DataFormatException("El email no es valido");
+			throw new DataFormatException(STRINGS_MODELO.getString("error.email.format"));
 		this.email = email;
 	}
 	
@@ -158,7 +158,7 @@ public class Cliente implements Serializable {
 	 * @param direccion direccion del cliente, no debe ser null
 	 */
 	public void setDireccion(Direccion direccion) {
-		assert direccion != null : "La direccion no puede ser null";
+		assert direccion != null : STRINGS_MODELO.getString("error.direccion.null");
 		this.direccion = direccion;
 	}
 	

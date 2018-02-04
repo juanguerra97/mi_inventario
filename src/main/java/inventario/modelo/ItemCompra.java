@@ -3,11 +3,12 @@ package inventario.modelo;
 import java.math.BigDecimal;
 import inventario.modelo.error.EmptyArgumentException;
 import inventario.modelo.error.ModelConstraintViolationException;
+import static inventario.modelo.Resources.STRINGS_MODELO;
 
 /**
  * Clase para representar los datos de un elemento de una compra
- * @author juang
- *
+ * @author juang 
+ * 
  */
 public class ItemCompra extends ItemTransaccion {
 
@@ -50,9 +51,9 @@ public class ItemCompra extends ItemTransaccion {
 	 * @throws EmptyArgumentException si el nombre del proveedor esta vacio
 	 */
 	public void setProveedor(String proveedor) throws EmptyArgumentException {
-		assert proveedor != null : "El nombre del proveedor no puede ser null";
+		assert proveedor != null : STRINGS_MODELO.getString("error.nom_prov.null");
 		if(proveedor.isEmpty())
-			throw new EmptyArgumentException("El nombre del proveedor no puede quedar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nom_prov.empty"));
 		this.proveedor = proveedor;
 	}
 	

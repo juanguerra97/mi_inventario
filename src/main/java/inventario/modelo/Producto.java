@@ -1,5 +1,7 @@
 package inventario.modelo;
 
+import static inventario.modelo.Resources.STRINGS_MODELO;
+
 import java.io.Serializable;
 
 import inventario.modelo.error.EmptyArgumentException;
@@ -57,7 +59,7 @@ public class Producto implements Serializable {
 	 */
 	public void setId(long id) throws ModelConstraintViolationException {
 		if(id <= 0)
-			throw new ModelConstraintViolationException("El ID debe ser mayor a cero");
+			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.id_producto"));
 		this.id = id;
 	}
 	
@@ -73,9 +75,9 @@ public class Producto implements Serializable {
 	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
 	public void setNombre(String nombre) throws EmptyArgumentException {
-		assert nombre != null : "El nombre no puede ser null";
+		assert nombre != null : STRINGS_MODELO.getString("error.nombre_producto.null");
 		if(nombre.isEmpty())
-			throw new EmptyArgumentException("El nombre no puede estar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nombre_producto.empty"));
 		this.nombre = nombre;
 	}
 	
@@ -91,9 +93,9 @@ public class Producto implements Serializable {
 	 * @throws EmptyArgumentException si la marca esta vacia
 	 */
 	public void setMarca(String marca) throws EmptyArgumentException {
-		assert marca != null : "La marca no puede ser null";
+		assert marca != null : STRINGS_MODELO.getString("error.marca_producto.null");
 		if(marca.isEmpty())
-			throw new EmptyArgumentException("La marca no puede estar vacia");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.marca_producto.empty"));
 		this.marca = marca;
 	}
 	

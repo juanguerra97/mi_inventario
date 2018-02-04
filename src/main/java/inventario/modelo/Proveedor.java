@@ -1,7 +1,7 @@
 package inventario.modelo;
 
 import java.io.Serializable;
-
+import static inventario.modelo.Resources.STRINGS_MODELO;
 import inventario.modelo.error.EmptyArgumentException;
 
 /**
@@ -36,9 +36,9 @@ public class Proveedor implements Serializable {
 	 * @throws EmptyArgumentException si el nombre esta vacio
 	 */
 	public void setNombre(String nombre) throws EmptyArgumentException {
-		assert nombre != null : "El nombre del proveedor no puede ser null";
+		assert nombre != null : STRINGS_MODELO.getString("error.nom_prov.null");
 		if(nombre.isEmpty())
-			throw new EmptyArgumentException("El nombre del proveedor no puede quedar vacio");
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nom_prov.empty"));
 		this.nombre = nombre;
 	}
 	
