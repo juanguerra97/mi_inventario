@@ -2,6 +2,10 @@ package inventario.dao;
 
 import java.util.List;
 import java.util.Optional;
+
+import inventario.dao.error.CannotDeleteException;
+import inventario.dao.error.CannotInsertException;
+import inventario.dao.error.CannotUpdateException;
 import inventario.dao.error.DBConnectionException;
 import inventario.modelo.Producto;
 
@@ -66,8 +70,10 @@ public interface DAOProducto {
 	 * @param producto objeto con los datos del nuevo producto, no debe ser null
 	 * @return true si la insercion se realiza con exito
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
+	 * @throws CannotInsertException si no se puede insertar el producto, por ejemplo si la 
+	 * llave primaria esta duplicada
 	 */
-	boolean insert(Producto producto) throws DBConnectionException;
+	boolean insert(Producto producto) throws DBConnectionException, CannotInsertException;
 	
 	/**
 	 * Metodo para insertar un nuevo producto a la base de datos
@@ -75,8 +81,10 @@ public interface DAOProducto {
 	 * y el objeto no debe ser null
 	 * @return devuelve el ID generado del producto si se tuvo exito, -1 si ocurrio un error
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
+	 * @throws CannotInsertException si no se puede insertar el producto, por ejemplo si la 
+	 * llave primaria esta duplicada
 	 */
-	long insertAndGet(Producto producto) throws DBConnectionException;
+	long insertAndGet(Producto producto) throws DBConnectionException, CannotInsertException;
 	
 	/**
 	 * Metodo que elimina todos los productos que tengan el ID que se pase como argumento
@@ -84,8 +92,10 @@ public interface DAOProducto {
 	 * @return true si el producto se elimino con exito o no existia, false si ocurre 
 	 * un error
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
+	 * @throws CannotDeleteException si no se puede eliminar el producto, por ejemplo si 
+	 * aun hay existencias del producto
 	 */
-	boolean delete(long idProducto) throws DBConnectionException;
+	boolean delete(long idProducto) throws DBConnectionException, CannotDeleteException;
 	
 	/**
 	 * Metodo para actualizar todos los datos de un producto
@@ -94,8 +104,10 @@ public interface DAOProducto {
 	 * @return true si se actualiza con exito o el si producto viejo no existia,
 	 *  false si ocurre un error
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
+	 * @throws CannotUpdateException si no se puede realizar la actualizacion, por ejemplo 
+	 * si en los nuevos datos se esta repitiendo una llave primaria
 	 */
-	boolean update(Producto viejo, Producto nuevo) throws DBConnectionException;
+	boolean update(Producto viejo, Producto nuevo) throws DBConnectionException, CannotUpdateException;
 	
 	/**
 	 * Metodo para actualizar el nombre y marca de un producto
@@ -104,7 +116,9 @@ public interface DAOProducto {
 	 * @return true si se actualiza con exito o el si producto viejo no existia,
 	 *  false si ocurre un error
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
+	 * @throws CannotUpdateException si no se puede realizar la actualizacion, por ejemplo 
+	 * si tanto el nuevo nombre como marca ya estan registrados
 	 */
-	boolean update(long idProducto, Producto nuevo) throws DBConnectionException;
+	boolean update(long idProducto, Producto nuevo) throws DBConnectionException, CannotUpdateException;
 	
 }
