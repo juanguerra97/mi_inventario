@@ -2,6 +2,7 @@ package inventario.dao;
 
 import inventario.dao.error.CannotDeleteException;
 import inventario.dao.error.CannotInsertException;
+import inventario.dao.error.CannotUpdateException;
 import inventario.dao.error.DBConnectionException;
 import inventario.modelo.Lote;
 
@@ -28,8 +29,10 @@ public interface DAOLote {
 	 * @param nuevo datos nuevos del lote, no debe ser null
 	 * @return true si se realiza la actualizacion
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
+	 * @throws CannotUpdateException si no se puede actualizar el lote, por ejemplo 
+	 * si se esta repitiendo la llave primaria
 	 */
-	boolean update(Lote viejo, Lote nuevo) throws DBConnectionException; 
+	boolean update(Lote viejo, Lote nuevo) throws DBConnectionException, CannotUpdateException; 
 
 	/**
 	 * Metodo para eliminar un lote
