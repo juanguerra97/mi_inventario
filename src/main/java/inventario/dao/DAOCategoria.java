@@ -2,7 +2,6 @@ package inventario.dao;
 
 import java.util.List;
 
-import inventario.dao.error.CannotDeleteException;
 import inventario.dao.error.CannotInsertException;
 import inventario.dao.error.CannotUpdateException;
 import inventario.dao.error.DBConnectionException;
@@ -50,11 +49,8 @@ public interface DAOCategoria {
 	 * @param categoria categoria a eliminar, no debe ser null
 	 * @return true si la eliminacion se realiza con exito
 	 * @throws DBConnectionException si ocurre un error de conexion con la base de datos
-	 * @throws CannotDeleteException si la categoria no se puede eliminar, por ejemplo, 
-	 * si aun hay productos en una categoria
 	 */
-	boolean delete(Categoria categoria) throws DBConnectionException, 
-										CannotDeleteException;
+	boolean delete(Categoria categoria) throws DBConnectionException;
 	
 	/**
 	 * Metodo para actualizar los datos de una categoria
