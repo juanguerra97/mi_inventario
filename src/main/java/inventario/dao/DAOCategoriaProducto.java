@@ -19,15 +19,6 @@ public interface DAOCategoriaProducto {
 	List<Producto> getAll(String categoria, int index, int size);
 	
 	/**
-	 * Metodo para obtener todos los productos cuya categoria haga match con una expresion regular
-	 * @param index posicion desde la que se deben obtener los registros
-	 * @param size numero maximo de registros a devolver
-	 * @param regex expresion regular que se utilizara para comparar, no debe ser null
-	 * @return lista con todos los productos de las categorias que hagan match con regex
-	 */
-	List<Producto> getAll( int index, int size, String regex);
-	
-	/**
 	 * Metodo para obtener todas las categorias de un producto
 	 * @param idProducto ID del producto que debe estar asociado a las categorias
 	 * @param index posicion desde la que se deben recuperar los registros
