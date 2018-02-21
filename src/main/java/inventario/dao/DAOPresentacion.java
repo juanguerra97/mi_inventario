@@ -56,6 +56,6 @@ public interface DAOPresentacion {
 	 * @param regex expresion regular con la que se deben comparar las presentaciones
 	 * @return lista con las presentaciones que hagan match con regex
 	 */
-	List<Presentacion> getAll(int index, int size, int regex);
+	List<Presentacion> getAll(int index, int size, String regex);
 	
 }
