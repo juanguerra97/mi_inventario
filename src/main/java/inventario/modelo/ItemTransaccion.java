@@ -16,7 +16,7 @@ public abstract class ItemTransaccion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private long numeroTransaccion;// numero de la transaccion a la que pertenece el item
-	private long idProducto;
+	private String nomProducto;
 	private String marcaProducto;
 	private String presentacionProducto;
 	private long loteProducto;
@@ -27,21 +27,21 @@ public abstract class ItemTransaccion implements Serializable {
 	/**
 	 * Constructor
 	 * @param numeroTransaccion numero de la transaccion a la que pertenece el item
-	 * @param idProducto id del producto
+	 * @param nomProducto nombre del producto, no debe ser null
 	 * @param marcaProducto marca del producto, no debe ser null
 	 * @param presentacionProducto presentacion del producto, no debe ser null
 	 * @param loteProducto lote del producto
 	 * @param valorUnitario valor unitario del producto, no puede ser null
 	 * @param cantidad cantidad del producto
-	 * @throws ModelConstraintViolationException si el numero de transaccion, id del producto, lote, cantidad o valor unitario 
+	 * @throws ModelConstraintViolationException si el numero de transaccion, lote, cantidad o valor unitario 
 	 * son invalidos
-	 * @throws EmptyArgumentException si la marca o la presentacion estan vacios
+	 * @throws EmptyArgumentException si la marca, nombre de producto o la presentacion estan vacios
 	 */
-	public ItemTransaccion(long numeroTransaccion, long idProducto, String marcaProducto, String presentacionProducto,
+	public ItemTransaccion(long numeroTransaccion, String nomProducto, String marcaProducto, String presentacionProducto,
 			long loteProducto, BigDecimal valorUnitario, int cantidad) 
 					throws ModelConstraintViolationException, EmptyArgumentException {
 		setNumeroTransaccion(numeroTransaccion);
-		setIdProducto(idProducto);
+		setNomProducto(nomProducto);
 		setMarcaProducto(marcaProducto);
 		setPresentacionProducto(presentacionProducto);
 		setLoteProducto(loteProducto);
@@ -67,20 +67,20 @@ public abstract class ItemTransaccion implements Serializable {
 	}
 	
 	/**
-	 * Devuelve el id del producto
-	 * @return id del producto
+	 * Devuelve el nombre del producto
+	 * @return
 	 */
-	public long getIdProducto() {return idProducto;}
+	public String getNomProducto() {return nomProducto;}
 	
 	/**
-	 * Establece el id del producto
-	 * @param idProducto id del producto
-	 * @throws ModelConstraintViolationException si el id es negativo o cero
+	 * Establece el nombre del producto
+	 * @param nomProducto nombre del producto, no debe ser null
+	 * @throws EmptyArgumentException  si el nombre del producto esta vacio
 	 */
-	public void setIdProducto(long idProducto) throws ModelConstraintViolationException {
-		if(idProducto <= 0)
-			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.id_producto"));
-		this.idProducto = idProducto;
+	public void setNomProducto(String nomProducto) throws EmptyArgumentException {
+		assert nomProducto != null : STRINGS_MODELO.getString("error.nombre_producto.null");
+		if(nomProducto.isEmpty())
+			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nombre_producto.empty"));
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public abstract class ItemTransaccion implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "#" + numeroTransaccion + " ID: " + idProducto + " Marca: " + marcaProducto 
+		return "#" + numeroTransaccion + " Producto: " + nomProducto + " Marca: " + marcaProducto 
 				+ " Presentacion: " + presentacionProducto + " #Lote: " + loteProducto;
 	}
 
@@ -219,9 +219,9 @@ public abstract class ItemTransaccion implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (idProducto ^ (idProducto >>> 32));
 		result = prime * result + (int) (loteProducto ^ (loteProducto >>> 32));
 		result = prime * result + ((marcaProducto == null) ? 0 : marcaProducto.hashCode());
+		result = prime * result + ((nomProducto == null) ? 0 : nomProducto.hashCode());
 		result = prime * result + (int) (numeroTransaccion ^ (numeroTransaccion >>> 32));
 		result = prime * result + ((presentacionProducto == null) ? 0 : presentacionProducto.hashCode());
 		return result;
@@ -230,7 +230,7 @@ public abstract class ItemTransaccion implements Serializable {
 	@Override
 	/**
 	 * Dos objetos de esta clase se consideran iguales si tienen el mismo 
-	 * numero de transaccion, el mismo id de producto, el mismo lote, la misma marca
+	 * numero de transaccion, el mismo nombre de producto, el mismo lote, la misma marca
 	 * y la misma presentacion.
 	 * Para la comparacion de marca y presentacion no se diferencia entre mayusculas y 
 	 * minusculas
@@ -243,21 +243,24 @@ public abstract class ItemTransaccion implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ItemTransaccion other = (ItemTransaccion) obj;
-		if (idProducto != other.idProducto)
-			return false;
 		if (loteProducto != other.loteProducto)
 			return false;
 		if (marcaProducto == null) {
 			if (other.marcaProducto != null)
 				return false;
-		} else if (!marcaProducto.equalsIgnoreCase(other.marcaProducto))
+		} else if (!marcaProducto.equals(other.marcaProducto))
+			return false;
+		if (nomProducto == null) {
+			if (other.nomProducto != null)
+				return false;
+		} else if (!nomProducto.equals(other.nomProducto))
 			return false;
 		if (numeroTransaccion != other.numeroTransaccion)
 			return false;
 		if (presentacionProducto == null) {
 			if (other.presentacionProducto != null)
 				return false;
-		} else if (!presentacionProducto.equalsIgnoreCase(other.presentacionProducto))
+		} else if (!presentacionProducto.equals(other.presentacionProducto))
 			return false;
 		return true;
 	}

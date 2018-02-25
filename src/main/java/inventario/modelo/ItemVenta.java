@@ -22,7 +22,7 @@ public class ItemVenta extends ItemTransaccion {
 	/**
 	 * Constructor
 	 * @param numeroTransaccion numero de la transaccion a la que pertenece el item
-	 * @param idProducto id del producto
+	 * @param nomProducto nombre del producto, no debe ser null
 	 * @param marcaProducto marca del producto, no debe ser null
 	 * @param presentacionProducto presentacion del producto, no debe ser null
 	 * @param loteProducto lote del producto
@@ -30,16 +30,16 @@ public class ItemVenta extends ItemTransaccion {
 	 * @param cantidad cantidad del producto
 	 * @param dpiCliente DPI del cliente, si no se conoce debe ser null(siempre y cuando se provea un nombre)
 	 * @param nombreCliente nombre del cliente, debe ser null si no se conoce(siempre y cuando se provea el DPI)
-	 * @throws ModelConstraintViolationException si el numero de transaccion, id del producto, lote, cantidad, valor unitario 
+	 * @throws ModelConstraintViolationException si el numero de transaccion, lote, cantidad, valor unitario 
 	 * son invalidos; o si tanto el DPI como el nombre del cliente son null
-	 * @throws EmptyArgumentException si la marca, presentacion, DPI o nombre estan vacios
+	 * @throws EmptyArgumentException si la marca, nombre del producto, presentacion, DPI o nombre del cliente estan vacios
 	 * @throws DataFormatException si el formato del DPI no es valido
 	 */
-	public ItemVenta(long numeroTransaccion, long idProducto, String marcaProducto, 
+	public ItemVenta(long numeroTransaccion, String nomProducto, String marcaProducto, 
 			String presentacionProducto, long loteProducto, BigDecimal valorUnitario, 
 			int cantidad, String dpiCliente, String nombreCliente)
 			throws ModelConstraintViolationException, EmptyArgumentException, DataFormatException {
-		super(numeroTransaccion, idProducto, marcaProducto, presentacionProducto, 
+		super(numeroTransaccion, nomProducto, marcaProducto, presentacionProducto, 
 				loteProducto, valorUnitario, cantidad);
 		if(dpiCliente == null && nombreCliente == null)
 			throw new ModelConstraintViolationException(STRINGS_MODELO.getString("error.dpi_nom_cliente.null"));
@@ -50,23 +50,23 @@ public class ItemVenta extends ItemTransaccion {
 	/**
 	 * Constructor
 	 * @param numeroTransaccion numero de la transaccion a la que pertenece el item
-	 * @param idProducto id del producto
+	 * @param nomProducto nombre del producto, no debe ser null
 	 * @param marcaProducto marca del producto, no debe ser null
 	 * @param presentacionProducto presentacion del producto, no debe ser null
 	 * @param loteProducto lote del producto
 	 * @param valorUnitario valor unitario del producto, no puede ser null
 	 * @param cantidad cantidad del producto
 	 * @param dpiCliente DPI del cliente, no debe ser null
-	 * @throws ModelConstraintViolationException si el numero de transaccion, id del producto, lote, cantidad, valor unitario 
+	 * @throws ModelConstraintViolationException si el numero de transaccion, lote, cantidad, valor unitario 
 	 * son invalidos; o si tanto el DPI como el nombre del cliente son null
-	 * @throws EmptyArgumentException si la marca, presentacion o DPI estan vacios
+	 * @throws EmptyArgumentException si la marca, nombre del producto, presentacion o DPI estan vacios
 	 * @throws DataFormatException si el formato del DPI no es valido
 	 */
-	public ItemVenta(long numeroTransaccion, long idProducto, String marcaProducto, 
+	public ItemVenta(long numeroTransaccion, String nomProducto, String marcaProducto, 
 			String presentacionProducto, long loteProducto, BigDecimal valorUnitario, 
 			int cantidad, String dpiCliente)
 			throws ModelConstraintViolationException, EmptyArgumentException, DataFormatException {
-		super(numeroTransaccion, idProducto, marcaProducto, presentacionProducto, 
+		super(numeroTransaccion, nomProducto, marcaProducto, presentacionProducto, 
 				loteProducto, valorUnitario, cantidad);
 		assert dpiCliente != null : STRINGS_MODELO.getString("error.dpi_cliente.null");
 		setDpiCliente(dpiCliente);
@@ -76,22 +76,22 @@ public class ItemVenta extends ItemTransaccion {
 	/**
 	 * Constructor
 	 * @param numeroTransaccion numero de la transaccion a la que pertenece el item
-	 * @param idProducto id del producto
+	 * @param nomProducto nombre del producto, no debe ser null
 	 * @param marcaProducto marca del producto, no debe ser null
 	 * @param presentacionProducto presentacion del producto, no debe ser null
 	 * @param loteProducto lote del producto
 	 * @param valorUnitario valor unitario del producto, no puede ser null
 	 * @param cantidad cantidad del producto
 	 * @param nombreCliente nombre del cliente, no debe ser null
-	 * @throws ModelConstraintViolationException si el numero de transaccion, id del producto, lote, cantidad, valor unitario 
+	 * @throws ModelConstraintViolationException si el numero de transaccion, lote, cantidad, valor unitario 
 	 * son invalidos
-	 * @throws EmptyArgumentException si la marca, presentacion o nombre estan vacios
+	 * @throws EmptyArgumentException si la marca, presentacion, nombre del producto o nombre del cliente estan vacios
 	 */
-	public ItemVenta(long numeroTransaccion, long idProducto, String marcaProducto, 
+	public ItemVenta(long numeroTransaccion, String nomProducto, String marcaProducto, 
 			String presentacionProducto, long loteProducto, String nombreCliente, 
 			BigDecimal valorUnitario, int cantidad)
 			throws ModelConstraintViolationException, EmptyArgumentException {
-		super(numeroTransaccion, idProducto, marcaProducto, presentacionProducto, 
+		super(numeroTransaccion, nomProducto, marcaProducto, presentacionProducto, 
 				loteProducto, valorUnitario, cantidad);
 		assert nombreCliente != null : STRINGS_MODELO.getString("error.nombre_cliente.null");
 		setNombreCliente(nombreCliente);
