@@ -110,13 +110,15 @@ public class DAOPresentacionLoteMySQL implements DAOPresentacionLote {
 	public boolean delete(PresentacionLote registro) throws DBConnectionException, CannotDeleteException {
 		assert registro != null : STRINGS_DAO.getString("error.presentacion_lote.null");
 		try(PreparedStatement st = con.prepareStatement(DELETE)){
-			if(registro.getCantidad() > 0)
-				throw new CannotDeleteException(STRINGS_DAO.getString("error.presentacion_lote.existencias"));
 			st.setLong(1, registro.getIdProducto());
 			st.setString(2, registro.getNombrePresentacion());
 			st.setLong(3, registro.getNumeroLote());
 			st.executeUpdate();
 		} catch (SQLException e) {
+			String msg = e.getMessage();
+			if(msg != null) {
+				throw new CannotDeleteException(STRINGS_DAO.getString("error.presentacion_lote.existencias"), e);
+			}
 			throw new DBConnectionException(STRINGS_DAO.getString("error.conexion"), e);
 		}
 		return true;
