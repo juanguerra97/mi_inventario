@@ -184,3 +184,15 @@ CREATE TRIGGER del_lot_check_unidades BEFORE DELETE ON Lote
             END IF;
 		END;//
 DELIMITER ;
+
+# trigger para evitar el borrado de relaciones presentacion-lote 
+#para las cuales hayan existencias
+DELIMITER //
+CREATE TRIGGER del_preslot_check_unidades BEFORE DELETE ON PresentacionLote
+	FOR EACH ROW
+		BEGIN
+			IF OLD.cantidad > 0 THEN
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO se puede eliminar el elemento ya que aun hay unidades en existencia';
+            END IF;
+		END;//
+DELIMITER ;
