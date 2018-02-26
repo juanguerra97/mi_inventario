@@ -81,6 +81,7 @@ public abstract class ItemTransaccion implements Serializable {
 		assert nomProducto != null : STRINGS_MODELO.getString("error.nombre_producto.null");
 		if(nomProducto.isEmpty())
 			throw new EmptyArgumentException(STRINGS_MODELO.getString("error.nombre_producto.empty"));
+		this.nomProducto = nomProducto;
 	}
 	
 	/**
