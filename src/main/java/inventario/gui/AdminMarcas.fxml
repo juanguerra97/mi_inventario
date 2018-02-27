@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<BorderPane minWidth="235.0" prefHeight="450.0" prefWidth="250.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+<BorderPane minWidth="235.0" prefHeight="450.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventario.gui.AdminMarcasController">
    <center>
       <ListView fx:id="listMarcas" BorderPane.alignment="CENTER" />
    </center>
