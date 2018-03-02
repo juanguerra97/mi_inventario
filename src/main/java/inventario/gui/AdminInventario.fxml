@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane prefHeight="450.0" prefWidth="750.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+<BorderPane prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
@@ -49,9 +50,23 @@
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                        <MenuItem mnemonicParsing="false" text="%deseleccionar" />
-                                          <MenuItem mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem mnemonicParsing="false" text="%nuevo">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator></MenuItem>
+                                        <MenuItem mnemonicParsing="false" text="%deseleccionar">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator></MenuItem>
+                                          <MenuItem mnemonicParsing="false" text="%eliminar">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator></MenuItem>
+                                          <CheckMenuItem fx:id="checkFiltrarProds" mnemonicParsing="false" text="%filtrarpormarca">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator>
+                                          </CheckMenuItem>
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>
