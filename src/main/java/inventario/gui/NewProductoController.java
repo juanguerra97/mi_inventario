@@ -130,7 +130,6 @@ public class NewProductoController {
 	}
 	
 	public void reset() {
-		btnGuardar.setDisable(true);
 		cargarCategorias();
 		boolean catEmpty = categorias.isEmpty();
 		lblCategorias.setDisable(catEmpty);

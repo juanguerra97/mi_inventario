@@ -59,6 +59,9 @@
                      </font>
                   </TextField>
                </children>
+               <padding>
+                  <Insets left="8.0" />
+               </padding>
             </GridPane>
             <Label fx:id="lblCategorias" disable="true" text="%categorias">
                <font>
@@ -72,7 +75,7 @@
    <top>
       <HBox alignment="CENTER_RIGHT" spacing="3.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnGuardar" disable="true" mnemonicParsing="false" text="%guardar">
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#onGuardar" text="%guardar">
                <font>
                   <Font size="13.0" />
                </font>
