@@ -129,7 +129,7 @@ public class NewProductoController {
 		}
 	}
 	
-	private void reset() {
+	public void reset() {
 		btnGuardar.setDisable(true);
 		cargarCategorias();
 		boolean catEmpty = categorias.isEmpty();
@@ -142,7 +142,7 @@ public class NewProductoController {
 	private void resetFields() {
 		fieldId.clear();
 		fieldNombre.clear();
-		fieldNombre.clear();
+		fieldMarca.clear();
 	}
 
 	private void cargarCategorias() {
