@@ -2,6 +2,11 @@ package inventario.gui;
 
 import static inventario.gui.Resources.STRINGS_GUI;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.SwingUtilities;
+
 import org.controlsfx.control.NotificationPane;
 
 import inventario.dao.mysql.Conexion;
@@ -51,6 +56,23 @@ public class Main extends Application {
 		ERROR.setTitle(STRINGS_GUI.getString("error"));
 		INFO.setTitle(STRINGS_GUI.getString("info"));
 		launch(args);
+	}
+	
+	public static synchronized void mostrarMensaje(String msg) {
+		Timer timer = new Timer();
+		root.show(msg);
+		timer.scheduleAtFixedRate(new TimerTask() {
+	        @Override
+	        public void run() {
+	            SwingUtilities.invokeLater(new Runnable() {
+	                @Override
+	                public void run() {
+	                	root.hide();
+	                	timer.cancel();
+	                }
+	            });
+	        }
+	    }, 3000, 3000);
 	}
 
 }
