@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventario.gui.AdminInventarioController">
+<BorderPane prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventario.gui.AdminInventarioController">
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
@@ -50,7 +50,7 @@
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="%nuevo">
+                                          <MenuItem mnemonicParsing="false" onAction="#onNuevoProducto" text="%nuevo">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>

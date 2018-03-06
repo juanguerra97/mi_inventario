@@ -1,17 +1,27 @@
 package inventario.gui;
 
+import static inventario.gui.Resources.STRINGS_GUI;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import org.controlsfx.control.NotificationPane;
 
 import inventario.modelo.Lote;
 import inventario.modelo.Presentacion;
 import inventario.modelo.PresentacionLote;
 import inventario.modelo.Producto;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class AdminInventarioController {
 	
@@ -36,6 +46,10 @@ public class AdminInventarioController {
 	@FXML private TableColumn<PresentacionLote,BigDecimal> colCostInv;
 	@FXML private TableColumn<PresentacionLote,Integer> colCantInv;
 	
+	private Stage vtnNewProd;
+	private NotificationPane paneNewProd;
+	private NewProductoController newProdCtrl;
+	
 	@FXML
 	private void initialize() {
 		
@@ -54,6 +68,29 @@ public class AdminInventarioController {
 		colCostInv.setCellValueFactory(new PropertyValueFactory<>("costo"));
 		colCantInv.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 		
+		vtnNewProd = new Stage();
+		vtnNewProd.setMinWidth(300);
+		vtnNewProd.setMinHeight(300);
+		vtnNewProd.initModality(Modality.APPLICATION_MODAL);
+		vtnNewProd.setTitle(STRINGS_GUI.getString("title.new.producto"));
+		paneNewProd = new NotificationPane();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/inventario/gui/NewProducto.fxml"),STRINGS_GUI);
+		try {
+			paneNewProd.setContent(loader.load());
+			newProdCtrl = loader.getController();
+			vtnNewProd.setScene(new Scene(paneNewProd,300,300));
+			newProdCtrl.setStage(vtnNewProd);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@FXML
+	private void onNuevoProducto(ActionEvent event) {
+		newProdCtrl.reset();
+		vtnNewProd.centerOnScreen();
+		vtnNewProd.showAndWait();
 	}
 
 }
