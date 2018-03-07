@@ -9,15 +9,18 @@ import java.util.List;
 
 import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 
 import inventario.dao.DAOCategoria;
 import inventario.dao.DAOCategoriaProducto;
+import inventario.dao.DAOMarca;
 import inventario.dao.DAOProducto;
 import inventario.dao.error.CannotInsertException;
 import inventario.dao.error.DBConnectionException;
 import inventario.dao.mysql.Conexion;
 import inventario.dao.mysql.DAOCategoriaMySQL;
 import inventario.dao.mysql.DAOCategoriaProductoMySQL;
+import inventario.dao.mysql.DAOMarcaMySQL;
 import inventario.dao.mysql.DAOProductoMySQL;
 import inventario.modelo.Categoria;
 import inventario.modelo.Producto;
@@ -43,6 +46,7 @@ public class NewProductoController {
 	private DAOCategoria daoCategorias = null;
 	private ObservableList<Categoria> categorias;
 	
+	private DAOMarca daoMarcas = null;
 	private DAOProducto daoProductos = null;
 	private DAOCategoriaProducto daoCatProd = null;
 	
@@ -55,13 +59,25 @@ public class NewProductoController {
 			daoCategorias = new DAOCategoriaMySQL(Conexion.get());
 			daoProductos = new DAOProductoMySQL(Conexion.get());
 			daoCatProd = new DAOCategoriaProductoMySQL(Conexion.get());
+			daoMarcas = new DAOMarcaMySQL(Conexion.get());
 		} catch (DBConnectionException|SQLException e) {
 			e.printStackTrace();
 		}
 		
 		categorias = listCategorias.getItems();
 		
+		// agrega boton "clear" a los campos de texto
+		Fields.setupClearButtonField(fieldId);
+		Fields.setupClearButtonField(fieldNombre);
+		Fields.setupClearButtonField(fieldMarca);
+		
+		// evento de autocompletado para el campo de marca
+		TextFields.bindAutoCompletion(fieldMarca, suggestionRequest ->
+			daoMarcas.getAll(0, 3, "^" + suggestionRequest.getUserText().trim() + ".*")
+		);
+		
 		reset();
+		btnGuardar.setDisable(false);
 		
 	}
 	
