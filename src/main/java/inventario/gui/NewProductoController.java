@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.textfield.CustomTextField;
 
 import inventario.dao.DAOCategoria;
 import inventario.dao.DAOCategoriaProducto;
@@ -27,15 +28,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 public class NewProductoController {
 	
 	@FXML private Button btnGuardar;
 	
-	@FXML private TextField fieldId;
-	@FXML private TextField fieldNombre;
-	@FXML private TextField fieldMarca;
+	@FXML private CustomTextField fieldId;
+	@FXML private CustomTextField fieldNombre;
+	@FXML private CustomTextField fieldMarca;
 	
 	@FXML private Label lblCategorias;
 	@FXML private CheckListView<Categoria> listCategorias;
