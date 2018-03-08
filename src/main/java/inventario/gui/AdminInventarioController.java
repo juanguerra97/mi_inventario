@@ -16,28 +16,40 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class AdminInventarioController {
 	
 	@FXML private ListView<String> listMarcas;
+	@FXML private MenuItem menuItemDesMarca;
 	
 	@FXML private TableView<Producto> tblProds;
 	@FXML private TableColumn<Producto,Long> colIdProd;
 	@FXML private TableColumn<Producto,String> colNomProd;
 	@FXML private TableColumn<Producto,String> colMarcaProd;
 	
+	@FXML private MenuItem menuItemDesProd;
+	@FXML private MenuItem menuItemElProd;
+	@FXML private CheckMenuItem checkFiltrarProds;
+	
 	@FXML private TableView<Presentacion> tblPres;
 	@FXML private TableColumn<Presentacion,String> colNomPres;
+	@FXML private MenuItem menuItemDesPresentacion;
+	@FXML private MenuItem menuItemElPresentacion;
 	
 	@FXML private TableView<Lote> tblLotes;
 	@FXML private TableColumn<Lote,Long> colNumLote;
 	@FXML private TableColumn<Lote,LocalDate> colFechaLote;
+	@FXML private MenuItem menuItemDesLote;
+	@FXML private MenuItem menuItemElLote;
 	
 	@FXML private TableView<PresentacionLote> tblInv;
 	@FXML private TableColumn<PresentacionLote,Long> colLotInv;
@@ -45,6 +57,8 @@ public class AdminInventarioController {
 	@FXML private TableColumn<PresentacionLote,BigDecimal> colPrecInv;
 	@FXML private TableColumn<PresentacionLote,BigDecimal> colCostInv;
 	@FXML private TableColumn<PresentacionLote,Integer> colCantInv;
+	@FXML private MenuItem menuItemDesInv;
+	@FXML private MenuItem menuItemElInv;
 	
 	private Stage vtnNewProd;
 	private NotificationPane paneNewProd;
@@ -91,6 +105,40 @@ public class AdminInventarioController {
 		newProdCtrl.reset();
 		vtnNewProd.centerOnScreen();
 		vtnNewProd.showAndWait();
+	}
+	
+	@FXML
+	private void onProductosContextMenuShown(WindowEvent event) {
+		boolean haySeleccion = tblProds.getSelectionModel().getSelectedItem() != null;
+		menuItemDesProd.setDisable(!haySeleccion);
+		menuItemElProd.setDisable(!haySeleccion);
+		checkFiltrarProds.setDisable(listMarcas.getItems().isEmpty());
+	}
+	
+	@FXML
+	private void onMarcasContextMenuShown(WindowEvent event) {
+		menuItemDesMarca.setDisable(listMarcas.getSelectionModel().getSelectedItem() == null);
+	}
+	
+	@FXML
+	private void onPresentacionesContextMenuShown(WindowEvent event) {
+		boolean haySeleccion = tblPres.getSelectionModel().getSelectedItem() != null;
+		menuItemDesPresentacion.setDisable(!haySeleccion);
+		menuItemElPresentacion.setDisable(!haySeleccion);
+	}
+	
+	@FXML
+	private void onLotesContextMenuShown(WindowEvent event) {
+		boolean haySeleccion = tblLotes.getSelectionModel().getSelectedItem() != null;
+		menuItemDesLote.setDisable(!haySeleccion);
+		menuItemElLote.setDisable(!haySeleccion);
+	}
+	
+	@FXML
+	private void onInventarioContextMenuShown(WindowEvent event) {
+		boolean haySeleccion = tblInv.getSelectionModel().getSelectedItem() != null;
+		menuItemDesInv.setDisable(!haySeleccion);
+		menuItemElInv.setDisable(!haySeleccion);
 	}
 
 }

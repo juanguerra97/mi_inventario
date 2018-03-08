@@ -23,9 +23,9 @@
                <children>
                   <ListView fx:id="listMarcas" maxWidth="350.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <contextMenu>
-                        <ContextMenu>
+                        <ContextMenu onShown="#onMarcasContextMenuShown">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="%deseleccionar" />
+                            <MenuItem fx:id="menuItemDesMarca" mnemonicParsing="false" text="%deseleccionar" />
                           </items>
                         </ContextMenu>
                      </contextMenu>
@@ -48,17 +48,17 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <contextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu onShown="#onProductosContextMenuShown">
                                       <items>
                                           <MenuItem mnemonicParsing="false" onAction="#onNuevoProducto" text="%nuevo">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
-                                        <MenuItem mnemonicParsing="false" text="%deseleccionar">
+                                        <MenuItem fx:id="menuItemDesProd" mnemonicParsing="false" text="%deseleccionar">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
-                                          <MenuItem mnemonicParsing="false" text="%eliminar">
+                                          <MenuItem fx:id="menuItemElProd" mnemonicParsing="false" text="%eliminar">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
@@ -83,11 +83,11 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <contextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu onShown="#onPresentacionesContextMenuShown">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                          <MenuItem mnemonicParsing="false" text="%deseleccionar" />
-                                          <MenuItem mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem fx:id="menuItemDesPresentacion" mnemonicParsing="false" text="%deseleccionar" />
+                                          <MenuItem fx:id="menuItemElPresentacion" mnemonicParsing="false" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -112,11 +112,11 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <contextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu onShown="#onInventarioContextMenuShown">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                          <MenuItem mnemonicParsing="false" text="%deseleccionar" />
-                                          <MenuItem mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem fx:id="menuItemDesInv" mnemonicParsing="false" text="%deseleccionar" />
+                                          <MenuItem fx:id="menuItemElInv" mnemonicParsing="false" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -134,11 +134,11 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <contextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu onShown="#onLotesContextMenuShown">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                          <MenuItem mnemonicParsing="false" text="%deseleccionar" />
-                                          <MenuItem mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem fx:id="menuItemDesLote" mnemonicParsing="false" text="%deseleccionar" />
+                                          <MenuItem fx:id="menuItemElLote" mnemonicParsing="false" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
