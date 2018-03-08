@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
@@ -11,6 +12,7 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventario.gui.AdminInventarioController">
    <padding>
@@ -19,19 +21,53 @@
    <center>
       <SplitPane dividerPositions="0.5" BorderPane.alignment="CENTER">
          <items>
-            <VBox maxWidth="350.0" prefWidth="200.0" spacing="5.0">
-               <children>
-                  <ListView fx:id="listMarcas" maxWidth="350.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                     <contextMenu>
-                        <ContextMenu onShown="#onMarcasContextMenuShown">
-                          <items>
-                            <MenuItem fx:id="menuItemDesMarca" mnemonicParsing="false" text="%deseleccionar" />
-                          </items>
-                        </ContextMenu>
-                     </contextMenu>
-                  </ListView>
-               </children>
-            </VBox>
+            <SplitPane dividerPositions="0.5" maxWidth="250.0" orientation="VERTICAL">
+               <items>
+                  <VBox minHeight="215.0" spacing="3.0">
+                     <children>
+                        <Label text="%marcas">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <ListView fx:id="listMarcas" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <contextMenu>
+                              <ContextMenu onShown="#onMarcasContextMenuShown">
+                                <items>
+                                  <MenuItem fx:id="menuItemDesMarca" mnemonicParsing="false" text="%deseleccionar" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </ListView>
+                     </children>
+                  </VBox>
+                  <VBox minHeight="215.0" spacing="3.0">
+                     <children>
+                        <Label text="%categorias">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <ListView fx:id="listCategorias" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <contextMenu>
+                              <ContextMenu onShown="#onCategoriasContextMenuShown">
+                                <items>
+                                    <MenuItem mnemonicParsing="false" text="%nuevo" />
+                                  <MenuItem fx:id="menuItemDesCategoria" mnemonicParsing="false" text="%deseleccionar" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </ListView>
+                     </children>
+                  </VBox>
+               </items>
+            </SplitPane>
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                <items>
                   <SplitPane dividerPositions="0.6" minHeight="210.0">
@@ -62,9 +98,14 @@
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
-                                          <CheckMenuItem fx:id="checkFiltrarProds" mnemonicParsing="false" text="%filtrarpormarca">
+                                          <CheckMenuItem fx:id="checkFiltrarProdsMarca" mnemonicParsing="false" text="%filtrarpormarca">
                                              <accelerator>
-                                                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                                <KeyCodeCombination alt="UP" code="M" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator>
+                                          </CheckMenuItem>
+                                          <CheckMenuItem fx:id="checkFiltrarProdsCategoria" mnemonicParsing="false" text="%filtrarporcategoria">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>
                                           </CheckMenuItem>
                                       </items>

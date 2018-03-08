@@ -31,6 +31,9 @@ public class AdminInventarioController {
 	@FXML private ListView<String> listMarcas;
 	@FXML private MenuItem menuItemDesMarca;
 	
+	@FXML private ListView<String> listCategorias;
+	@FXML private MenuItem menuItemDesCategoria;
+	
 	@FXML private TableView<Producto> tblProds;
 	@FXML private TableColumn<Producto,Long> colIdProd;
 	@FXML private TableColumn<Producto,String> colNomProd;
@@ -38,7 +41,8 @@ public class AdminInventarioController {
 	
 	@FXML private MenuItem menuItemDesProd;
 	@FXML private MenuItem menuItemElProd;
-	@FXML private CheckMenuItem checkFiltrarProds;
+	@FXML private CheckMenuItem checkFiltrarProdsMarca;
+	@FXML private CheckMenuItem checkFiltrarProdsCategoria;
 	
 	@FXML private TableView<Presentacion> tblPres;
 	@FXML private TableColumn<Presentacion,String> colNomPres;
@@ -112,12 +116,18 @@ public class AdminInventarioController {
 		boolean haySeleccion = tblProds.getSelectionModel().getSelectedItem() != null;
 		menuItemDesProd.setDisable(!haySeleccion);
 		menuItemElProd.setDisable(!haySeleccion);
-		checkFiltrarProds.setDisable(listMarcas.getItems().isEmpty());
+		checkFiltrarProdsMarca.setDisable(listMarcas.getItems().isEmpty());
+		checkFiltrarProdsCategoria.setDisable(listCategorias.getItems().isEmpty());
 	}
 	
 	@FXML
 	private void onMarcasContextMenuShown(WindowEvent event) {
 		menuItemDesMarca.setDisable(listMarcas.getSelectionModel().getSelectedItem() == null);
+	}
+	
+	@FXML
+	private void onCategoriasContextMenuShown(WindowEvent event) {
+		menuItemDesCategoria.setDisable(listCategorias.getSelectionModel().getSelectedItem() == null);
 	}
 	
 	@FXML
