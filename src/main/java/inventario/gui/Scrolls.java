@@ -4,6 +4,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.TableView;
 
 public class Scrolls {
 
@@ -13,6 +14,7 @@ public class Scrolls {
 	 * @return scroll bar si la lista lo tiene, null si no se puede obtener
 	 */
 	public static ScrollBar getListViewVerticalScrollBar(ListView<?> listView) {
+		assert listView != null;
 		ScrollBar scrollbar = null;
 		for (Node node : listView.lookupAll(".scroll-bar")) {
 			if (node instanceof ScrollBar) {
@@ -31,7 +33,8 @@ public class Scrolls {
 	 * @param tableView tabla de la que se obtendra el scrollbar, no debe ser null
 	 * @return scroll bar si la tabla lo tiene, null si no se puede obtener
 	 */
-	public static ScrollBar getTableViewVerticalScrollBar(ListView<?> tableView) {
+	public static ScrollBar getTableViewVerticalScrollBar(TableView<?> tableView) {
+		assert tableView != null;
 		ScrollBar scrollbar = null;
 		for (Node node : tableView.lookupAll(".scroll-bar")) {
 			if (node instanceof ScrollBar) {
