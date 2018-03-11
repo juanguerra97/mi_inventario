@@ -17,6 +17,16 @@ public class Validacion {
 	 */
 	public static final String REGEX_TELEFONO = "^[1-9]\\d{7}$";
 	
+	/**
+	 * Regex para validar el nombre de un producto
+	 */
+	public static final String REGEX_NOM_PRODUCTO = "^[\\d.\\s\\p{L}\\p{Punct}]+$";
+	
+	/**
+	 * Regex para validar el nombre de una marca
+	 */
+	public static final String REGEX_NOM_MARCA = "^[\\d.\\s\\p{L}\\p{Punct}]+$";
+	
 	// constructor privado
 	private Validacion() {}
 
