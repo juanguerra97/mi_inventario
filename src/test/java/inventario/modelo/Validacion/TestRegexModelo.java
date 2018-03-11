@@ -1,6 +1,11 @@
 package inventario.modelo.Validacion;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -50,6 +55,30 @@ public class TestRegexModelo {
 		assertFalse(tel3.matches(Validacion.REGEX_TELEFONO));
 		String tel4 = "1234E567";
 		assertFalse(tel4.matches(Validacion.REGEX_TELEFONO));
+	}
+	
+	@Test
+	public void testRegexNomProducto() {
+		Pattern p = Pattern.compile(Validacion.REGEX_NOM_PRODUCTO,
+				Pattern.UNICODE_CHARACTER_CLASS);
+		String nomsOK[] =  {"Frijol","ARROZ","Azúcar","Uranio 94","caña"};
+		for(String n : nomsOK) {
+			Matcher m = p.matcher(n);
+			m.find();
+			assertEquals(true, m.matches());
+		}
+	}
+	
+	@Test
+	public void testRegexNomMarca() {
+		Pattern p = Pattern.compile(Validacion.REGEX_NOM_MARCA,
+				Pattern.UNICODE_CHARACTER_CLASS);
+		String nomsOK[] =  {"Coca cola","incá","TENNIS 98"};
+		for(String n : nomsOK) {
+			Matcher m = p.matcher(n);
+			m.find();
+			assertEquals(true, m.matches());
+		}
 	}
 
 }
