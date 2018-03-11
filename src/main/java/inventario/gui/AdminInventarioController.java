@@ -134,6 +134,16 @@ public class AdminInventarioController {
 		});
 		executor.shutdown();
 		
+		listMarcas.getSelectionModel().selectedItemProperty().addListener((o,oldValue,newValue)->{
+			if(checkFiltrarProdsMarca.isSelected())
+				cargarProductos();
+		});
+		
+		listCategorias.getSelectionModel().selectedItemProperty().addListener((o,oldValue,newValue)->{
+			if(checkFiltrarProdsCategoria.isSelected())
+				cargarProductos();
+		});
+		
 		vtnNewProd = new Stage();
 		vtnNewProd.setMinWidth(300);
 		vtnNewProd.setMinHeight(300);
