@@ -173,7 +173,10 @@ public class AdminInventarioController {
 			else if(categIsNull)
 				items.setAll(daoProds.getAll(listMarcas.getSelectionModel().getSelectedItem(), 0, 30));
 			else
-				;// SE DEBEN CARGAR LOS PRODUCTOS FILTRADOS POR MARCA Y CATEGORIA
+				items.setAll(daoProds.getAll(
+						listMarcas.getSelectionModel().getSelectedItem(),
+						listCategorias.getSelectionModel().getSelectedItem(), 
+						0, 30));
 		} else if(mar) {
 			items.setAll(daoProds.getAll(
 						listMarcas.getSelectionModel().getSelectedItem(), 
@@ -224,7 +227,10 @@ public class AdminInventarioController {
 								listMarcas.getSelectionModel().getSelectedItem(), 
 								index, STEP);
 					else
-						;// SE DEBEN CARGAR LOS PRODUCTOS FILTRADOS POR MARCA Y CATEGORIA
+						prods = daoProds.getAll(
+								listMarcas.getSelectionModel().getSelectedItem(),
+								listCategorias.getSelectionModel().getSelectedItem(), 
+								index, STEP);
 				}
 				break;
 			case NONE:
@@ -260,6 +266,7 @@ public class AdminInventarioController {
 				filtroProductos = FiltroProd.CATEGORIA;
 			else 
 				filtroProductos = 	FiltroProd.NONE;
+			cargarProductos();
 		}
 	}
 	
