@@ -98,12 +98,12 @@
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
-                                          <CheckMenuItem fx:id="checkFiltrarProdsMarca" mnemonicParsing="false" text="%filtrarpormarca">
+                                          <CheckMenuItem fx:id="checkFiltrarProdsMarca" mnemonicParsing="false" onAction="#onFiltrar" text="%filtrarpormarca">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="M" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>
                                           </CheckMenuItem>
-                                          <CheckMenuItem fx:id="checkFiltrarProdsCategoria" mnemonicParsing="false" text="%filtrarporcategoria">
+                                          <CheckMenuItem fx:id="checkFiltrarProdsCategoria" mnemonicParsing="false" onAction="#onFiltrar" text="%filtrarporcategoria">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>

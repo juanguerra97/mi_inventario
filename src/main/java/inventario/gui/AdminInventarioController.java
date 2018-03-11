@@ -68,6 +68,8 @@ public class AdminInventarioController {
 	private NotificationPane paneNewProd;
 	private NewProductoController newProdCtrl;
 	
+	FiltroProd filtroProductos = FiltroProd.NONE;
+	
 	@FXML
 	private void initialize() {
 		
@@ -104,11 +106,29 @@ public class AdminInventarioController {
 		
 	}
 	
+	
 	@FXML
 	private void onNuevoProducto(ActionEvent event) {
 		newProdCtrl.reset();
 		vtnNewProd.centerOnScreen();
 		vtnNewProd.showAndWait();
+	}
+	
+	@FXML
+	private void onFiltrar(ActionEvent event) {
+		Object source = event.getSource();
+		if(source.equals(checkFiltrarProdsMarca) || source.equals(checkFiltrarProdsCategoria)) {
+			boolean mar = checkFiltrarProdsMarca.isSelected();
+			boolean cat = checkFiltrarProdsCategoria.isSelected();
+			if(mar && cat)
+				filtroProductos = FiltroProd.MARCA_CATEGORIA;
+			else if(mar) 
+				filtroProductos = FiltroProd.MARCA;
+			else if(cat)
+				filtroProductos = FiltroProd.CATEGORIA;
+			else 
+				filtroProductos = 	FiltroProd.NONE;
+		}
 	}
 	
 	@FXML
@@ -151,4 +171,11 @@ public class AdminInventarioController {
 		menuItemElInv.setDisable(!haySeleccion);
 	}
 
+}
+
+enum FiltroProd {
+	NONE,
+	MARCA,
+	CATEGORIA,
+	MARCA_CATEGORIA
 }
