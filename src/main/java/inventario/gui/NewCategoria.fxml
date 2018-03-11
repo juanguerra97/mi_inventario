@@ -19,7 +19,7 @@
             <Font size="15.0" />
          </font>
       </CustomTextField>
-      <Button fx:id="btnGuardar" mnemonicParsing="false" text="%guardar">
+      <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#onGuardar" text="%guardar">
          <font>
             <Font size="13.0" />
          </font>
