@@ -1,5 +1,6 @@
 package inventario.gui;
 
+import static inventario.gui.Main.ERROR;
 import static inventario.gui.Resources.STRINGS_GUI;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import org.controlsfx.control.NotificationPane;
 import inventario.dao.DAOCategoriaProducto;
 import inventario.dao.DAOMarca;
 import inventario.dao.DAOProducto;
+import inventario.dao.error.CannotDeleteException;
 import inventario.dao.error.DBConnectionException;
 import inventario.dao.mysql.Conexion;
 import inventario.dao.mysql.DAOCategoriaProductoMySQL;
@@ -30,6 +32,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
@@ -90,6 +95,11 @@ public class AdminInventarioController {
 	
 	FiltroProd filtroProductos = FiltroProd.NONE;
 	
+	private static ButtonType BTN_ELIMINAR = new ButtonType(STRINGS_GUI.getString("eliminar"));
+	private static ButtonType BTN_CANCEL = new ButtonType(STRINGS_GUI.getString("cancelar"));
+	private static final Alert CONFIRM = new Alert(AlertType.CONFIRMATION,
+			STRINGS_GUI.getString("producto.delete.confirm"), BTN_ELIMINAR,BTN_CANCEL);
+	
 	@FXML
 	private void initialize() {
 		
@@ -100,6 +110,9 @@ public class AdminInventarioController {
 		} catch (DBConnectionException | SQLException ex) {
 			ex.printStackTrace();
 		}
+		
+		CONFIRM.setTitle(STRINGS_GUI.getString("confirm"));
+		CONFIRM.setHeaderText(STRINGS_GUI.getString("producto.delete.warning"));
 		
 		colIdProd.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colNomProd.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -261,6 +274,30 @@ public class AdminInventarioController {
 		vtnNewProd.showAndWait();
 		cargarMarcas();
 		cargarProductos();
+	}
+	
+	@FXML
+	private void onEliminarProducto(ActionEvent event) {
+		Producto prod = tblProds.getSelectionModel().getSelectedItem();
+		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
+			try {
+				daoProds.delete(prod.getId());
+				Main.mostrarMensaje(STRINGS_GUI.getString("msg.delete.producto"));
+				cargarMarcas();
+				tblProds.getSelectionModel().clearSelection();
+				tblProds.getItems().remove(prod);
+			} catch (DBConnectionException e) {
+				e.printStackTrace();
+				ERROR.setHeaderText(STRINGS_GUI.getString("error.conexion"));
+				ERROR.setContentText(e.getMessage());
+				ERROR.showAndWait();
+			} catch (CannotDeleteException e) {
+				e.printStackTrace();
+				ERROR.setHeaderText(STRINGS_GUI.getString("error.consulta"));
+				ERROR.setContentText(e.getMessage());
+				ERROR.showAndWait();
+			}
+		});
 	}
 	
 	@FXML

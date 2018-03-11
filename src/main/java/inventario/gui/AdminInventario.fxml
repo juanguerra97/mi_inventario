@@ -94,7 +94,7 @@
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
-                                          <MenuItem fx:id="menuItemElProd" mnemonicParsing="false" text="%eliminar">
+                                          <MenuItem fx:id="menuItemElProd" mnemonicParsing="false" onAction="#onEliminarProducto" text="%eliminar">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
