@@ -42,10 +42,10 @@ public class Main extends Application {
 		root.setContent(FXMLLoader.load(
 				getClass().getResource("/inventario/gui/HomeGUI.fxml"), 
 				Resources.STRINGS_GUI));
-		Scene s = new Scene(root,750,450);
+		Scene s = new Scene(root,800,500);
 		stg.setScene(s);
 		stg.setMinWidth(750);
-		stg.setMinHeight(450);
+		stg.setMinHeight(500);
 		stg.setOnCloseRequest(w->{
 			Conexion.close();
 		});
