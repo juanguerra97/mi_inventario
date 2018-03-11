@@ -112,8 +112,8 @@ public class DAOProductoMySQL implements DAOProducto {
 			return productos;
 		try(PreparedStatement st = con.prepareStatement(GET_ALL_II)){
 			st.setString(1, marca);
-			st.setInt(1, start);
-			st.setInt(2, size);
+			st.setInt(2, start);
+			st.setInt(3, size);
 			ResultSet rs = st.executeQuery();
 			while(rs.next())
 				productos.add(new Producto(rs.getLong("id"),rs.getString("nombre"), marca));
