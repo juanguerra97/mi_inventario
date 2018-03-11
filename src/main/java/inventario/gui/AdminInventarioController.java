@@ -11,15 +11,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import org.controlsfx.control.NotificationPane;
 
+import inventario.dao.DAOCategoria;
 import inventario.dao.DAOCategoriaProducto;
 import inventario.dao.DAOMarca;
 import inventario.dao.DAOProducto;
 import inventario.dao.error.CannotDeleteException;
 import inventario.dao.error.DBConnectionException;
 import inventario.dao.mysql.Conexion;
+import inventario.dao.mysql.DAOCategoriaMySQL;
 import inventario.dao.mysql.DAOCategoriaProductoMySQL;
 import inventario.dao.mysql.DAOMarcaMySQL;
 import inventario.dao.mysql.DAOProductoMySQL;
@@ -89,9 +92,14 @@ public class AdminInventarioController {
 	private NotificationPane paneNewProd;
 	private NewProductoController newProdCtrl;
 	
+	private Stage vtnNewCat;
+	private NotificationPane paneNewCat;
+	private NewCategoriaController newCatCtrl;
+	
 	private DAOProducto daoProds = null;
 	private DAOCategoriaProducto daoCatsProd = null;
 	private DAOMarca daoMarcas = null;
+	private DAOCategoria daoCategorias = null;
 	
 	FiltroProd filtroProductos = FiltroProd.NONE;
 	
@@ -107,6 +115,7 @@ public class AdminInventarioController {
 			daoProds = new DAOProductoMySQL(Conexion.get());
 			daoCatsProd = new DAOCategoriaProductoMySQL(Conexion.get());
 			daoMarcas = new DAOMarcaMySQL(Conexion.get());
+			daoCategorias = new DAOCategoriaMySQL(Conexion.get());
 		} catch (DBConnectionException | SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -164,17 +173,34 @@ public class AdminInventarioController {
 		vtnNewProd.setTitle(STRINGS_GUI.getString("title.new.producto"));
 		paneNewProd = new NotificationPane();
 		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/inventario/gui/NewProducto.fxml"),STRINGS_GUI);
+		vtnNewCat = new Stage();
+		vtnNewCat.setMinWidth(380);
+		vtnNewCat.setMaxWidth(800);
+		vtnNewCat.setMinHeight(70);
+		vtnNewCat.setMaxHeight(120);
+		vtnNewCat.initModality(Modality.APPLICATION_MODAL);
+		vtnNewCat.setTitle(STRINGS_GUI.getString("title.new.categoria"));
+		paneNewCat = new NotificationPane();
+		
+		FXMLLoader loaderNewProd = new FXMLLoader(getClass().getResource("/inventario/gui/NewProducto.fxml"),STRINGS_GUI);
+		FXMLLoader loaderNewCat = new FXMLLoader(getClass().getResource("/inventario/gui/NewCategoria.fxml"),STRINGS_GUI);
+		
 		try {
-			paneNewProd.setContent(loader.load());
-			newProdCtrl = loader.getController();
+			paneNewProd.setContent(loaderNewProd.load());
+			newProdCtrl = loaderNewProd.getController();
 			vtnNewProd.setScene(new Scene(paneNewProd,300,300));
 			newProdCtrl.setStage(vtnNewProd);
+			
+			paneNewCat.setContent(loaderNewCat.load());
+			newCatCtrl = loaderNewCat.getController();
+			vtnNewCat.setScene(new Scene(paneNewCat,350,85));
+			newCatCtrl.setStage(vtnNewCat);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		cargarMarcas();
+		cargarCategorias();
 		cargarProductos();
 		
 	}
@@ -220,6 +246,16 @@ public class AdminInventarioController {
 		listMarcas.getItems().setAll(daoMarcas.getAll(0, 50));
 		listMarcas.getSelectionModel().select(m);
 		listMarcas.setDisable(listMarcas.getItems().isEmpty());
+	}
+	
+	private void cargarCategorias() {
+		String c = listCategorias.getSelectionModel().getSelectedItem();
+		listCategorias.getSelectionModel().clearSelection();
+		listCategorias.getItems().setAll(
+				daoCategorias.getAll(0, 50)
+				.stream().map(cat->cat.toString()).collect(Collectors.toList()));
+		listCategorias.getSelectionModel().select(c);
+		listCategorias.setDisable(listCategorias.getItems().isEmpty());
 	}
 	
 	private List<Producto> getProdDataScroll() {
@@ -274,6 +310,14 @@ public class AdminInventarioController {
 		vtnNewProd.showAndWait();
 		cargarMarcas();
 		cargarProductos();
+	}
+	
+	@FXML
+	private void onNuevaCategoria(ActionEvent event) {
+		newCatCtrl.reset();
+		vtnNewCat.centerOnScreen();
+		vtnNewCat.showAndWait();
+		cargarCategorias();
 	}
 	
 	@FXML

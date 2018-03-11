@@ -58,7 +58,7 @@
                            <contextMenu>
                               <ContextMenu onShown="#onCategoriasContextMenuShown">
                                 <items>
-                                    <MenuItem mnemonicParsing="false" text="%nuevo" />
+                                    <MenuItem mnemonicParsing="false" onAction="#onNuevaCategoria" text="%nueva" />
                                   <MenuItem fx:id="menuItemDesCategoria" mnemonicParsing="false" onAction="#onDeselectCategoria" text="%deseleccionar" />
                                 </items>
                               </ContextMenu>
@@ -126,7 +126,7 @@
                                  <contextMenu>
                                     <ContextMenu onShown="#onPresentacionesContextMenuShown">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="%nuevo" />
+                                          <MenuItem mnemonicParsing="false" text="%nueva" />
                                           <MenuItem fx:id="menuItemDesPresentacion" mnemonicParsing="false" onAction="#onDeselectPresentacion" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElPresentacion" mnemonicParsing="false" text="%eliminar" />
                                        </items>
