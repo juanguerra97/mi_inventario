@@ -29,6 +29,9 @@ public class DAOProductoMySQL implements DAOProducto {
 			+ "WHERE marca = ? ORDER BY id ASC,nombre LIMIT ?,?";
 	private static final String GET_ALL_III = "SELECT id,nombre,marca FROM Producto "
 			+ "WHERE nombre REGEXP(?) ORDER BY id ASC,nombre,marca LIMIT ?,?";
+	private static final String GET_ALL_MARCA_AND_CAT = "SELECT id,nombre FROM Producto "
+			+ "WHERE marca = ? AND id IN (SELECT id_producto FROM CategoriaProducto "
+			+ "WHERE nom_categoria = ?) LIMIT ?,?";
 	private static final String INSERT = "INSERT INTO Producto(id,nombre,marca) VALUES(?,?,?)";
 	private static final String INSERT_II = "INSERT INTO Producto(nombre,marca) VALUES(?,?)";
 	private static final String DELETE = "DELETE FROM Producto WHERE id = ?";
@@ -114,6 +117,27 @@ public class DAOProductoMySQL implements DAOProducto {
 			st.setString(1, marca);
 			st.setInt(2, start);
 			st.setInt(3, size);
+			ResultSet rs = st.executeQuery();
+			while(rs.next())
+				productos.add(new Producto(rs.getLong("id"),rs.getString("nombre"), marca));
+		} catch (SQLException | ModelConstraintViolationException | EmptyArgumentException e) {
+			e.printStackTrace();
+		}
+		return productos;
+	}
+	
+	@Override
+	public List<Producto> getAll(String marca, String categoria, int start, int size) {
+		assert marca != null : STRINGS_DAO.getString("error.producto.marca.null") ;
+		assert categoria != null : STRINGS_DAO.getString("error.categoria.null") ;
+		List<Producto> productos = new LinkedList<>();
+		if(start < 0 || size <= 0)
+			return productos;
+		try(PreparedStatement st = con.prepareStatement(GET_ALL_MARCA_AND_CAT)){
+			st.setString(1, marca);
+			st.setString(2, categoria);
+			st.setInt(3, start);
+			st.setInt(4, size);
 			ResultSet rs = st.executeQuery();
 			while(rs.next())
 				productos.add(new Producto(rs.getLong("id"),rs.getString("nombre"), marca));

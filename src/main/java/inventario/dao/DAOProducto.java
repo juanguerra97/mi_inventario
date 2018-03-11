@@ -66,6 +66,16 @@ public interface DAOProducto {
 	List<Producto> getAll(int start, int size, String regex);
 	
 	/**
+	 * Metodo para obtener los productos de cierta marca en cierta categoria
+	 * @param marca marca a la que deben pertenecer los productos, no debe ser null
+	 * @param categoria categoria a la que deben pertenecer los producto, no debe ser null
+	 * @param start indice desde el cual se deben recuperar los registros
+	 * @param size numero maximo de productos que puede contener la lista
+	 * @return lista con los productos de la marca y categoria especificados
+	 */
+	List<Producto> getAll(String marca,String categoria, int start, int size);
+	
+	/**
 	 * Metodo para insertar un nuevo producto a la base de datos
 	 * @param producto objeto con los datos del nuevo producto, no debe ser null
 	 * @return true si la insercion se realiza con exito
