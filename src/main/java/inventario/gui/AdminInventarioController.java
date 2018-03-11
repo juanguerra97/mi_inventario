@@ -206,6 +206,7 @@ public class AdminInventarioController {
 		listMarcas.getSelectionModel().clearSelection();
 		listMarcas.getItems().setAll(daoMarcas.getAll(0, 50));
 		listMarcas.getSelectionModel().select(m);
+		listMarcas.setDisable(listMarcas.getItems().isEmpty());
 	}
 	
 	private List<Producto> getProdDataScroll() {
@@ -319,7 +320,36 @@ public class AdminInventarioController {
 		menuItemDesInv.setDisable(!haySeleccion);
 		menuItemElInv.setDisable(!haySeleccion);
 	}
-
+	
+	@FXML
+	private void onDeselectMarca(ActionEvent event) {
+		listMarcas.getSelectionModel().clearSelection();
+	}
+	
+	@FXML
+	private void onDeselectCategoria(ActionEvent event) {
+		listCategorias.getSelectionModel().clearSelection();
+	}
+	
+	@FXML
+	private void onDeselectProducto(ActionEvent event) {
+		tblProds.getSelectionModel().clearSelection();
+	}
+	
+	@FXML
+	private void onDeselectPresentacion(ActionEvent event) {
+		tblPres.getSelectionModel().clearSelection();
+	}
+	
+	@FXML
+	private void onDeselectLote(ActionEvent event) {
+		tblLotes.getSelectionModel().clearSelection();
+	}
+	
+	@FXML
+	private void onDeselectInventario(ActionEvent event) {
+		tblInv.getSelectionModel().clearSelection();
+	}
 }
 
 enum FiltroProd {

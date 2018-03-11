@@ -37,7 +37,7 @@
                            <contextMenu>
                               <ContextMenu onShown="#onMarcasContextMenuShown">
                                 <items>
-                                  <MenuItem fx:id="menuItemDesMarca" mnemonicParsing="false" text="%deseleccionar" />
+                                  <MenuItem fx:id="menuItemDesMarca" mnemonicParsing="false" onAction="#onDeselectMarca" text="%deseleccionar" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -59,7 +59,7 @@
                               <ContextMenu onShown="#onCategoriasContextMenuShown">
                                 <items>
                                     <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                  <MenuItem fx:id="menuItemDesCategoria" mnemonicParsing="false" text="%deseleccionar" />
+                                  <MenuItem fx:id="menuItemDesCategoria" mnemonicParsing="false" onAction="#onDeselectCategoria" text="%deseleccionar" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -90,7 +90,7 @@
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
-                                        <MenuItem fx:id="menuItemDesProd" mnemonicParsing="false" text="%deseleccionar">
+                                        <MenuItem fx:id="menuItemDesProd" mnemonicParsing="false" onAction="#onDeselectProducto" text="%deseleccionar">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
@@ -127,7 +127,7 @@
                                     <ContextMenu onShown="#onPresentacionesContextMenuShown">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                          <MenuItem fx:id="menuItemDesPresentacion" mnemonicParsing="false" text="%deseleccionar" />
+                                          <MenuItem fx:id="menuItemDesPresentacion" mnemonicParsing="false" onAction="#onDeselectPresentacion" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElPresentacion" mnemonicParsing="false" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
@@ -156,7 +156,7 @@
                                     <ContextMenu onShown="#onInventarioContextMenuShown">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                          <MenuItem fx:id="menuItemDesInv" mnemonicParsing="false" text="%deseleccionar" />
+                                          <MenuItem fx:id="menuItemDesInv" mnemonicParsing="false" onAction="#onDeselectInventario" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElInv" mnemonicParsing="false" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
@@ -178,7 +178,7 @@
                                     <ContextMenu onShown="#onLotesContextMenuShown">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="%nuevo" />
-                                          <MenuItem fx:id="menuItemDesLote" mnemonicParsing="false" text="%deseleccionar" />
+                                          <MenuItem fx:id="menuItemDesLote" mnemonicParsing="false" onAction="#onDeselectLote" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElLote" mnemonicParsing="false" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
