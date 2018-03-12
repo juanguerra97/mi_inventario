@@ -265,7 +265,6 @@ public class AdminInventarioController {
 				daoCategorias.getAll(0, 50)
 				.stream().map(cat->cat.toString()).collect(Collectors.toList()));
 		listCategorias.getSelectionModel().select(c);
-		listCategorias.setDisable(listCategorias.getItems().isEmpty());
 	}
 	
 	private List<Producto> getProdDataScroll() {
@@ -334,13 +333,19 @@ public class AdminInventarioController {
 	private void onEliminarProducto(ActionEvent event) {
 		Producto prod = tblProds.getSelectionModel().getSelectedItem();
 		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
+			Connection con = null;
+			boolean eliminado = false;
 			try {
+				con = Conexion.get();
+				con.setAutoCommit(false);
 				daoProds.delete(prod.getId());
-				Main.mostrarMensaje(STRINGS_GUI.getString("msg.delete.producto"));
+				eliminado = true;
+				String msgExito = STRINGS_GUI.getString("msg.delete.producto");
+				Main.mostrarMensaje(msgExito.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre() + "\""));
 				cargarMarcas();
 				tblProds.getSelectionModel().clearSelection();
 				tblProds.getItems().remove(prod);
-			} catch (DBConnectionException e) {
+			} catch (DBConnectionException | SQLException e) {
 				e.printStackTrace();
 				ERROR.setHeaderText(STRINGS_GUI.getString("error.conexion"));
 				ERROR.setContentText(e.getMessage());
@@ -350,6 +355,15 @@ public class AdminInventarioController {
 				ERROR.setHeaderText(STRINGS_GUI.getString("error.consulta"));
 				ERROR.setContentText(e.getMessage());
 				ERROR.showAndWait();
+			}finally {
+				if(con != null) {
+					try {
+						if(eliminado)
+							con.commit();
+						else
+							con.rollback();
+					} catch (SQLException e) {}
+				}
 			}
 		});
 	}
@@ -521,12 +535,8 @@ public class AdminInventarioController {
 		boolean eliminados = true;
 		try {
 			con = Conexion.get();
+			con.setAutoCommit(false);
 			Categoria categoria = new Categoria(listCategorias.getSelectionModel().getSelectedItem());
-			daoCatsProd.getAll(categoria.toString(), 0, 500).forEach(c->{
-				try {
-					daoCatsProd.delete(c.getId(), categoria.toString());
-				} catch (DBConnectionException e) {}
-			});;
 			daoCategorias.delete(categoria);
 			String msgExito = STRINGS_GUI.getString("msg.delete.categoria");
 			listCategorias.getItems().remove(categoria.toString());
