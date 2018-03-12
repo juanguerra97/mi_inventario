@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -59,6 +60,7 @@
                               <ContextMenu onShown="#onCategoriasContextMenuShown">
                                 <items>
                                     <MenuItem mnemonicParsing="false" onAction="#onNuevaCategoria" text="%nueva" />
+                                    <MenuItem fx:id="menuItemElCategoria" mnemonicParsing="false" onAction="#onEliminarCategoria" text="%eliminar" />
                                   <MenuItem fx:id="menuItemDesCategoria" mnemonicParsing="false" onAction="#onDeselectCategoria" text="%deseleccionar" />
                                 </items>
                               </ContextMenu>
@@ -98,6 +100,7 @@
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator></MenuItem>
+                                          <SeparatorMenuItem mnemonicParsing="false" />
                                           <CheckMenuItem fx:id="checkFiltrarProdsMarca" mnemonicParsing="false" onAction="#onFiltrar" text="%filtrarpormarca">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="M" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -108,12 +111,13 @@
                                                 <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>
                                           </CheckMenuItem>
+                                          <SeparatorMenuItem fx:id="separatorMItCat" mnemonicParsing="false" visible="false" />
                                           <MenuItem fx:id="menuItemAnadirCat" mnemonicParsing="false" onAction="#onAnadirCategoria" text="%anadira" visible="false">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>
                                           </MenuItem>
-                                          <MenuItem fx:id="menuItemQuitCategoria" mnemonicParsing="false" onAction="#onQuitarCategoria" text="%quitarde">
+                                          <MenuItem fx:id="menuItemQuitCategoria" mnemonicParsing="false" onAction="#onQuitarCategoria" text="%quitarde" visible="false">
                                              <accelerator>
                                                 <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>

@@ -5,6 +5,7 @@ import static inventario.gui.Resources.STRINGS_GUI;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -44,6 +45,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -60,6 +62,7 @@ public class AdminInventarioController {
 	
 	@FXML private ListView<String> listCategorias;
 	@FXML private MenuItem menuItemDesCategoria;
+	@FXML private MenuItem menuItemElCategoria;
 	
 	@FXML private TableView<Producto> tblProds;
 	@FXML private TableColumn<Producto,Long> colIdProd;
@@ -68,6 +71,7 @@ public class AdminInventarioController {
 	
 	@FXML private MenuItem menuItemDesProd;
 	@FXML private MenuItem menuItemElProd;
+	@FXML private SeparatorMenuItem separatorMItCat;
 	@FXML private MenuItem menuItemAnadirCat;
 	@FXML private MenuItem menuItemQuitCategoria;
 	@FXML private CheckMenuItem checkFiltrarProdsMarca;
@@ -242,7 +246,8 @@ public class AdminInventarioController {
 		} else {
 			items.setAll(daoProds.getAll(0, 50));
 		}
-		tblProds.getSelectionModel().select(p);
+		if(items.contains(p))
+			tblProds.getSelectionModel().select(p);
 	}
 	
 	private void cargarMarcas() {
@@ -371,8 +376,10 @@ public class AdminInventarioController {
 	private void onProductosContextMenuShown(WindowEvent event) {
 		Producto prod = tblProds.getSelectionModel().getSelectedItem();
 		boolean haySeleccion = prod != null;
+		
 		menuItemDesProd.setDisable(!haySeleccion);
 		menuItemElProd.setDisable(!haySeleccion);
+		
 		checkFiltrarProdsMarca.setDisable(listMarcas.getItems().isEmpty());
 		checkFiltrarProdsCategoria.setDisable(listCategorias.getItems().isEmpty());
 		
@@ -401,8 +408,13 @@ public class AdminInventarioController {
 		} catch (EmptyArgumentException e1) {
 			e1.printStackTrace();
 		}
+		
+		separatorMItCat.setVisible(anadirVisible || quitarVisible);
 		menuItemAnadirCat.setVisible(anadirVisible);
+		menuItemAnadirCat.setDisable(!anadirVisible);
 		menuItemQuitCategoria.setVisible(quitarVisible);
+		menuItemQuitCategoria.setDisable(!quitarVisible);
+		
 	}
 	
 	@FXML
@@ -412,7 +424,9 @@ public class AdminInventarioController {
 	
 	@FXML
 	private void onCategoriasContextMenuShown(WindowEvent event) {
-		menuItemDesCategoria.setDisable(listCategorias.getSelectionModel().getSelectedItem() == null);
+		boolean catIsNull = listCategorias.getSelectionModel().getSelectedItem() == null;
+		menuItemDesCategoria.setDisable(catIsNull);
+		menuItemElCategoria.setDisable(catIsNull);
 	}
 	
 	@FXML
@@ -498,6 +512,38 @@ public class AdminInventarioController {
 			Main.mostrarMensaje(msgExito);
 		} catch (DBConnectionException e) {
 			Main.mostrarMensaje(e.getMessage());
+		}
+	}
+	
+	@FXML
+	private void onEliminarCategoria(ActionEvent event) {
+		Connection con = null;
+		boolean eliminados = true;
+		try {
+			con = Conexion.get();
+			Categoria categoria = new Categoria(listCategorias.getSelectionModel().getSelectedItem());
+			daoCatsProd.getAll(categoria.toString(), 0, 500).forEach(c->{
+				try {
+					daoCatsProd.delete(c.getId(), categoria.toString());
+				} catch (DBConnectionException e) {}
+			});;
+			daoCategorias.delete(categoria);
+			String msgExito = STRINGS_GUI.getString("msg.delete.categoria");
+			listCategorias.getItems().remove(categoria.toString());
+			listCategorias.getSelectionModel().clearSelection();
+			Main.mostrarMensaje(msgExito.replaceAll("\\{\\{C\\}\\}", "\"" + categoria + "\""));
+		} catch (EmptyArgumentException e) {} 
+		catch (DBConnectionException | SQLException e) {
+			Main.mostrarMensaje(e.getMessage());
+		} finally {
+			if(con != null) {
+				try {
+					if(eliminados)
+						con.commit();
+					else
+						con.rollback();
+				} catch (SQLException e) {}
+			}
 		}
 	}
 	
