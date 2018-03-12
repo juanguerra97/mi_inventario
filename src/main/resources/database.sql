@@ -11,12 +11,12 @@ CREATE TABLE Producto(
     nombre VARCHAR(70) NOT NULL,
     marca VARCHAR(70) NOT NULL,
     UNIQUE INDEX id2_prod(nombre,marca)
-);
+) ENGINE=INNODB;
 
 # tabla para almacenar las categorias de productos
 CREATE TABLE Categoria (
 	nombre VARCHAR(70) PRIMARY KEY
-);
+) ENGINE=INNODB;
 
 # tabla para relacionar la tabla de Productos con la  tabla de Categorias
 # la relacion es de varios a varios
@@ -28,7 +28,7 @@ CREATE TABLE CategoriaProducto(
     INDEX ikeycatfromprod(nom_categoria),
     FOREIGN KEY fkeycatfromprod(nom_categoria) REFERENCES Categoria(nombre) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(id_producto,nom_categoria)
-);
+) ENGINE=INNODB;
 
 # tabla con la informacion de las presentaciones de los productos
 # la relion es de uno a varios desde producto a presentacion
@@ -38,7 +38,7 @@ CREATE TABLE Presentacion(
     INDEX ikeyprodfrompre(id_producto),
     FOREIGN KEY fkeyprodfrompre(id_producto) REFERENCES Producto(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(id_producto,nombre)
-);
+) ENGINE=INNODB;
 
 # tabla para almacenar informacion de los lotes de los productos
 # la relacion es de uno a varios desde producto a lote
@@ -49,7 +49,7 @@ CREATE TABLE Lote(
     INDEX ikeyprodfromlot(id_producto),
     FOREIGN KEY fkeyprodfromlot(id_producto) REFERENCES Producto(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(id_producto,numero)
-);
+) ENGINE=INNODB;
 
 
 # tabla para relacionar los lotes de un producto con sus presentaciones
@@ -66,12 +66,12 @@ CREATE TABLE PresentacionLote(
     INDEX ikeylotfromprelot(id_producto,num_lote),
     FOREIGN KEY fkeylotfromprelot(id_producto,num_lote) REFERENCES Lote(id_producto,numero) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(id_producto,nom_presentacion,num_lote)
-);
+) ENGINE=INNODB;
 
 # tabla con informacion de proveedores
 CREATE TABLE Proveedor(
 	nombre VARCHAR(70) PRIMARY KEY
-);
+) ENGINE=INNODB;
 
 # tabla para relacionar los proveedores con los productos
 # la relacion es de varios a varios
@@ -81,9 +81,9 @@ CREATE TABLE ProveedorProducto(
     INDEX ikeyprodfromprovprod(id_producto),
     FOREIGN KEY fkeyprodfromprovprod(id_producto) REFERENCES Producto(id) ON DELETE CASCADE ON UPDATE CASCADE,
     INDEX ikeyprovfromprovprod(nom_proveedor),
-    FOREIGN KEY fkeyprovfromprovprod(nom_proveedor) REFERENCES Proveedor(nom_proveedor) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY fkeyprovfromprovprod(nom_proveedor) REFERENCES Proveedor(nombre) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(id_producto,nom_proveedor)
-);
+) ENGINE=INNODB;
 
 # tabla con informacion de clientes
 # se asume que todos los clientes son personas(no se aceptan instituciones como clientes)
@@ -97,7 +97,7 @@ CREATE TABLE Cliente(
     ciudad VARCHAR(40) NOT NULL,
     zona SMALLINT UNSIGNED NOT NULL CHECK(zona >= 1 AND zona <= 50),
     activo BOOL NOT NULL DEFAULT TRUE # indica si es un cliente activo(TRUE) o esta dado de baja(FALSE)
-);
+) ENGINE=INNODB;
 
 # tabla con informacion de las compras realizadas por la institucion
 # se copian algunos datos de productos para que los registros no se pierdan en caso de que esos productos se eliminen
@@ -105,7 +105,7 @@ CREATE TABLE Compra(
 	numero BIGINT UNSIGNED NOT NULL PRIMARY KEY,
     fecha DATE NOT NULL,
     total DECIMAL(12,2) UNSIGNED DEFAULT 0.0 NOT NULL
-);
+) ENGINE=INNODB;
 
 # tabla con los elementos de una compra ya que en una sola compra se pueden comprar diferentes productos
 CREATE TABLE ItemCompra(
@@ -123,7 +123,7 @@ CREATE TABLE ItemCompra(
 	INDEX ikeyprovfromitcom(nom_proveedor),
     FOREIGN KEY fkeyprovfromitcom(nom_proveedor) REFERENCES Proveedor(nombre) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(num_compra,nom_producto,marca_producto,nom_presentacion,lote_producto,nom_proveedor)
-);
+) ENGINE=INNODB;
 
 # tabla con informacion de las ventas realizadas por los clientes
 # se copian algunos datos de productos para que los registros no se pierdan en caso de que esos productos se eliminen
@@ -131,7 +131,7 @@ CREATE TABLE Venta(
 	numero BIGINT UNSIGNED NOT NULL PRIMARY KEY,
     fecha DATE NOT NULL,
     total DECIMAL(12,2) UNSIGNED DEFAULT 0.0 NOT NULL
-);
+) ENGINE=INNODB;
 
 # tabla con los elementos de una venta ya que en una sola venta se pueden vender diferentes productos
 CREATE TABLE ItemVenta(
@@ -149,7 +149,7 @@ CREATE TABLE ItemVenta(
     FOREIGN KEY fkeyvenfromitven(num_venta) REFERENCES Venta(numero) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY fkeyclifromitven(dpi_cliente) REFERENCES Cliente(dpi) ON DELETE SET NULL ON UPDATE CASCADE,
     PRIMARY KEY(num_venta,nom_producto,marca_producto,nom_presentacion,lote_producto)
-);
+) ENGINE=INNODB;
 
 # trigger para evitar el borrado de productos para los cuales hayan registros con cantidades en existencia
 DELIMITER //
