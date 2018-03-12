@@ -20,16 +20,19 @@ import inventario.dao.DAOCategoriaProducto;
 import inventario.dao.DAOMarca;
 import inventario.dao.DAOProducto;
 import inventario.dao.error.CannotDeleteException;
+import inventario.dao.error.CannotInsertException;
 import inventario.dao.error.DBConnectionException;
 import inventario.dao.mysql.Conexion;
 import inventario.dao.mysql.DAOCategoriaMySQL;
 import inventario.dao.mysql.DAOCategoriaProductoMySQL;
 import inventario.dao.mysql.DAOMarcaMySQL;
 import inventario.dao.mysql.DAOProductoMySQL;
+import inventario.modelo.Categoria;
 import inventario.modelo.Lote;
 import inventario.modelo.Presentacion;
 import inventario.modelo.PresentacionLote;
 import inventario.modelo.Producto;
+import inventario.modelo.error.EmptyArgumentException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,6 +68,8 @@ public class AdminInventarioController {
 	
 	@FXML private MenuItem menuItemDesProd;
 	@FXML private MenuItem menuItemElProd;
+	@FXML private MenuItem menuItemAnadirCat;
+	@FXML private MenuItem menuItemQuitCategoria;
 	@FXML private CheckMenuItem checkFiltrarProdsMarca;
 	@FXML private CheckMenuItem checkFiltrarProdsCategoria;
 	
@@ -364,11 +369,40 @@ public class AdminInventarioController {
 	
 	@FXML
 	private void onProductosContextMenuShown(WindowEvent event) {
-		boolean haySeleccion = tblProds.getSelectionModel().getSelectedItem() != null;
+		Producto prod = tblProds.getSelectionModel().getSelectedItem();
+		boolean haySeleccion = prod != null;
 		menuItemDesProd.setDisable(!haySeleccion);
 		menuItemElProd.setDisable(!haySeleccion);
 		checkFiltrarProdsMarca.setDisable(listMarcas.getItems().isEmpty());
 		checkFiltrarProdsCategoria.setDisable(listCategorias.getItems().isEmpty());
+		
+		String categoria = listCategorias.getSelectionModel().getSelectedItem();
+		if(categoria == null) {
+			menuItemAnadirCat.setVisible(false);
+			menuItemQuitCategoria.setVisible(false);
+			return;
+		}
+		
+		boolean anadirVisible = false;
+		boolean quitarVisible = false;
+		try {
+			
+			Categoria cSelected = new Categoria(categoria);
+			if (prod != null) {
+				boolean hasCat = daoCatsProd.getAll(prod.getId(), 0, 500).stream().anyMatch(c -> c.equals(cSelected));
+				if(hasCat) {
+					menuItemQuitCategoria.setText(STRINGS_GUI.getString("quitarde") + "\"" + cSelected + "\"");
+					quitarVisible = true;
+				} else {
+					menuItemAnadirCat.setText(STRINGS_GUI.getString("anadira") + " \"" + cSelected + "\"");
+					anadirVisible = true;
+				}
+			}
+		} catch (EmptyArgumentException e1) {
+			e1.printStackTrace();
+		}
+		menuItemAnadirCat.setVisible(anadirVisible);
+		menuItemQuitCategoria.setVisible(quitarVisible);
 	}
 	
 	@FXML
@@ -431,6 +465,42 @@ public class AdminInventarioController {
 	private void onDeselectInventario(ActionEvent event) {
 		tblInv.getSelectionModel().clearSelection();
 	}
+	
+	@FXML
+	private void onAnadirCategoria(ActionEvent event) {
+		Producto prod = tblProds.getSelectionModel().getSelectedItem();
+		String cat = listCategorias.getSelectionModel().getSelectedItem();
+		try {
+			daoCatsProd.insert(prod.getId(), cat);
+			String msgExito = STRINGS_GUI.getString("msg.insert.cat_prod");
+			msgExito = msgExito.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre() + "\"");
+			msgExito = msgExito.replaceAll("\\{\\{C\\}\\}", "\"" + cat + "\"");
+			Main.mostrarMensaje(msgExito);
+		} catch (DBConnectionException e) {
+			Main.mostrarMensaje(e.getMessage());
+		} catch (CannotInsertException e) {
+			Main.mostrarMensaje(e.getMessage());
+		}
+	}
+	
+	@FXML
+	private void onQuitarCategoria(ActionEvent event) {
+		Producto prod = tblProds.getSelectionModel().getSelectedItem();
+		String cat = listCategorias.getSelectionModel().getSelectedItem();
+		try {
+			daoCatsProd.delete(prod.getId(), cat);
+			String msgExito = STRINGS_GUI.getString("msg.quitar.cat_prod");
+			msgExito = msgExito.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre() + "\"");
+			msgExito = msgExito.replaceAll("\\{\\{C\\}\\}", "\"" + cat + "\"");
+			if(filtroProductos == FiltroProd.CATEGORIA || filtroProductos == FiltroProd.MARCA_CATEGORIA) {
+				tblProds.getItems().remove(prod);
+			}
+			Main.mostrarMensaje(msgExito);
+		} catch (DBConnectionException e) {
+			Main.mostrarMensaje(e.getMessage());
+		}
+	}
+	
 }
 
 enum FiltroProd {

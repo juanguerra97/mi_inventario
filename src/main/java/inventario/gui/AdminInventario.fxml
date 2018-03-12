@@ -108,6 +108,16 @@
                                                 <KeyCodeCombination alt="UP" code="K" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                              </accelerator>
                                           </CheckMenuItem>
+                                          <MenuItem fx:id="menuItemAnadirCat" mnemonicParsing="false" onAction="#onAnadirCategoria" text="%anadira" visible="false">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator>
+                                          </MenuItem>
+                                          <MenuItem fx:id="menuItemQuitCategoria" mnemonicParsing="false" onAction="#onQuitarCategoria" text="%quitarde">
+                                             <accelerator>
+                                                <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                             </accelerator>
+                                          </MenuItem>
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>
