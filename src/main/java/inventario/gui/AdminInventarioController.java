@@ -15,6 +15,8 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.table.TableRowExpanderColumn;
+import org.controlsfx.control.textfield.TextFields;
 
 import inventario.dao.DAOCategoria;
 import inventario.dao.DAOCategoriaProducto;
@@ -22,6 +24,7 @@ import inventario.dao.DAOMarca;
 import inventario.dao.DAOProducto;
 import inventario.dao.error.CannotDeleteException;
 import inventario.dao.error.CannotInsertException;
+import inventario.dao.error.CannotUpdateException;
 import inventario.dao.error.DBConnectionException;
 import inventario.dao.mysql.Conexion;
 import inventario.dao.mysql.DAOCategoriaMySQL;
@@ -34,21 +37,27 @@ import inventario.modelo.Presentacion;
 import inventario.modelo.PresentacionLote;
 import inventario.modelo.Producto;
 import inventario.modelo.error.EmptyArgumentException;
+import inventario.modelo.error.ModelConstraintViolationException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -117,6 +126,7 @@ public class AdminInventarioController {
 	private static final Alert CONFIRM = new Alert(AlertType.CONFIRMATION,
 			STRINGS_GUI.getString("producto.delete.confirm"), BTN_ELIMINAR,BTN_CANCEL);
 	
+	@SuppressWarnings("unchecked")
 	@FXML
 	private void initialize() {
 		
@@ -146,6 +156,11 @@ public class AdminInventarioController {
 		colPrecInv.setCellValueFactory(new PropertyValueFactory<>("precio"));
 		colCostInv.setCellValueFactory(new PropertyValueFactory<>("costo"));
 		colCantInv.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+		
+		TableRowExpanderColumn<Producto> expandColProductos = new TableRowExpanderColumn<>(this::createEditor);
+		expandColProductos.setMinWidth(25);
+		expandColProductos.setMaxWidth(25);
+		tblProds.getColumns().setAll(expandColProductos,colIdProd,colNomProd,colMarcaProd);
 	
 		ExecutorService executor = Executors.newCachedThreadPool();
 		executor.execute(()->{
@@ -556,6 +571,77 @@ public class AdminInventarioController {
 			}
 		}
 	}
+	
+	private GridPane createEditor(TableRowExpanderColumn.TableRowDataFeatures<Producto> param) {
+		
+        GridPane editor = new GridPane();
+        editor.setPadding(new Insets(10));
+        editor.setHgap(10);
+        editor.setVgap(5);
+
+        Producto producto = param.getValue();
+        tblProds.getSelectionModel().select(producto);
+
+        TextField fieldID = TextFields.createClearableTextField();
+        TextField fieldNombre = TextFields.createClearableTextField();
+        TextField fieldMarca = TextFields.createClearableTextField();
+        
+        fieldID.setText(""+producto.getId());
+        fieldNombre.setText(producto.getNombre());
+        fieldMarca.setText(producto.getMarca());
+        
+		// evento de autocompletado para el campo de marca
+		TextFields.bindAutoCompletion(fieldMarca,
+				suggestionRequest -> daoMarcas.getAll(0, 3, "^" + suggestionRequest.getUserText().trim() + ".*"));
+
+        editor.addRow(0, new Label(STRINGS_GUI.getString("id")),fieldID);
+        editor.addRow(1, new Label(STRINGS_GUI.getString("nombre")), fieldNombre);
+        editor.addRow(2, new Label(STRINGS_GUI.getString("marca")), fieldMarca);
+
+        Button btnGuardar = new Button(STRINGS_GUI.getString("guardar"));
+        btnGuardar.setOnAction(event -> {
+        	String newNombre = fieldNombre.getText().trim();
+        	newNombre = newNombre.toUpperCase();
+        	String newMarca = fieldMarca.getText().trim();
+        	newMarca = newMarca.toUpperCase();
+        	try {
+				Producto actualizado = new Producto(Long.parseLong(fieldID.getText().trim()),newNombre,newMarca);
+				if(producto.getId() != actualizado.getId() || 
+						!producto.getNombre().equals(actualizado.getNombre()) ||
+						!producto.getMarca().equals(actualizado.getMarca())) {
+					daoProds.update(producto, actualizado);
+					if((filtroProductos == FiltroProd.MARCA || filtroProductos == FiltroProd.MARCA_CATEGORIA) &&
+							!producto.getMarca().equals(actualizado.getMarca())) {
+						tblProds.getSelectionModel().clearSelection();
+						tblProds.getItems().remove(producto);
+						cargarMarcas();
+					}
+					producto.setId(actualizado.getId());
+					producto.setNombre(actualizado.getNombre());
+					producto.setMarca(actualizado.getMarca());
+					Main.mostrarMensaje(STRINGS_GUI.getString("msg.update.producto"));
+				}
+				param.toggleExpanded();
+			} catch (NumberFormatException e) {
+				Main.mostrarMensaje(STRINGS_GUI.getString("error.numberformat").replaceAll("\\{\\{C\\}\\}", "ID"));
+				fieldID.selectAll();
+				fieldID.requestFocus();
+			} catch (ModelConstraintViolationException | EmptyArgumentException e) {
+				Main.mostrarMensaje(e.getMessage());
+			} catch (DBConnectionException | CannotUpdateException e) {
+				Main.mostrarMensaje(e.getMessage());
+			}
+        });
+
+        Button btnCancelar = new Button(STRINGS_GUI.getString("cancelar"));
+        btnCancelar.setOnAction(event -> {
+        	param.toggleExpanded();
+        });
+
+        editor.addRow(3, btnGuardar, btnCancelar);
+
+        return editor;
+    }
 	
 }
 
