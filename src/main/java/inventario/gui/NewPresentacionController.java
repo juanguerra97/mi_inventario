@@ -66,6 +66,8 @@ public class NewPresentacionController {
 		try {
 			Presentacion nueva = new Presentacion(producto.getId(), nombre);
 			daoPresentacion.insert(nueva);
+			stage.close();
+			Main.mostrarMensaje(STRINGS_GUI.getString("msg.insert.presentacion"));
 		} catch (ModelConstraintViolationException | EmptyArgumentException e) {
 			ERROR.setHeaderText(STRINGS_GUI.getString("error.datos"));
 			ERROR.setContentText(e.getMessage());
