@@ -27,7 +27,6 @@ public class NewPresentacionController {
 	@FXML private Button btnGuardar;
 	
 	private Stage stage = null;
-	
 	private DAOPresentacion daoPresentacion = null;
 	private Producto producto = null;// producto al que se agregara la nueva presentacion
 	
