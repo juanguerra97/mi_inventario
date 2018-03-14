@@ -1,6 +1,5 @@
 package inventario.gui;
 
-import static inventario.gui.Main.ERROR;
 import static inventario.gui.Resources.STRINGS_GUI;
 
 import java.io.IOException;
@@ -21,6 +20,8 @@ import org.controlsfx.control.textfield.TextFields;
 import inventario.dao.DAOCategoria;
 import inventario.dao.DAOCategoriaProducto;
 import inventario.dao.DAOMarca;
+import inventario.dao.DAOPresentacion;
+import inventario.dao.DAOPresentacionProducto;
 import inventario.dao.DAOProducto;
 import inventario.dao.error.CannotDeleteException;
 import inventario.dao.error.CannotInsertException;
@@ -30,6 +31,8 @@ import inventario.dao.mysql.Conexion;
 import inventario.dao.mysql.DAOCategoriaMySQL;
 import inventario.dao.mysql.DAOCategoriaProductoMySQL;
 import inventario.dao.mysql.DAOMarcaMySQL;
+import inventario.dao.mysql.DAOPresentacionMySQL;
+import inventario.dao.mysql.DAOPresentacionProductoMySQL;
 import inventario.dao.mysql.DAOProductoMySQL;
 import inventario.modelo.Categoria;
 import inventario.modelo.Lote;
@@ -88,12 +91,14 @@ public class AdminInventarioController {
 	
 	@FXML private TableView<Presentacion> tblPres;
 	@FXML private TableColumn<Presentacion,String> colNomPres;
+	@FXML private MenuItem menuItemNewPresentacion;
 	@FXML private MenuItem menuItemDesPresentacion;
 	@FXML private MenuItem menuItemElPresentacion;
 	
 	@FXML private TableView<Lote> tblLotes;
 	@FXML private TableColumn<Lote,Long> colNumLote;
 	@FXML private TableColumn<Lote,LocalDate> colFechaLote;
+	@FXML private MenuItem menuItemNewLote;
 	@FXML private MenuItem menuItemDesLote;
 	@FXML private MenuItem menuItemElLote;
 	
@@ -103,6 +108,7 @@ public class AdminInventarioController {
 	@FXML private TableColumn<PresentacionLote,BigDecimal> colPrecInv;
 	@FXML private TableColumn<PresentacionLote,BigDecimal> colCostInv;
 	@FXML private TableColumn<PresentacionLote,Integer> colCantInv;
+	@FXML private MenuItem menuItemNewInv;
 	@FXML private MenuItem menuItemDesInv;
 	@FXML private MenuItem menuItemElInv;
 	
@@ -114,10 +120,16 @@ public class AdminInventarioController {
 	private NotificationPane paneNewCat;
 	private NewCategoriaController newCatCtrl;
 	
+	private Stage vtnNewPres;
+	private NotificationPane paneNewPres;
+	private NewPresentacionController newPresCtrl;
+	
 	private DAOProducto daoProds = null;
 	private DAOCategoriaProducto daoCatsProd = null;
 	private DAOMarca daoMarcas = null;
 	private DAOCategoria daoCategorias = null;
+	private DAOPresentacion daoPresentaciones = null;
+	private DAOPresentacionProducto daoPresProd = null;
 	
 	FiltroProd filtroProductos = FiltroProd.NONE;
 	
@@ -135,6 +147,8 @@ public class AdminInventarioController {
 			daoCatsProd = new DAOCategoriaProductoMySQL(Conexion.get());
 			daoMarcas = new DAOMarcaMySQL(Conexion.get());
 			daoCategorias = new DAOCategoriaMySQL(Conexion.get());
+			daoPresentaciones = new DAOPresentacionMySQL(Conexion.get());
+			daoPresProd = new DAOPresentacionProductoMySQL(Conexion.get());
 		} catch (DBConnectionException | SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -180,6 +194,18 @@ public class AdminInventarioController {
 		});
 		executor.shutdown();
 		
+		tblProds.getSelectionModel().selectedItemProperty().addListener((o,oldValue,newValue)->{
+			boolean newIsNull = newValue == null;
+			tblPres.setDisable(newIsNull);
+			tblLotes.setDisable(newIsNull);
+			tblInv.setDisable(newIsNull);
+			if(newIsNull) {
+				tblPres.getItems().clear();
+			}else {
+				cargarPresentaciones(newValue);
+			}
+		});
+		
 		listMarcas.getSelectionModel().selectedItemProperty().addListener((o,oldValue,newValue)->{
 			if(checkFiltrarProdsMarca.isSelected())
 				cargarProductos();
@@ -206,9 +232,18 @@ public class AdminInventarioController {
 		vtnNewCat.setTitle(STRINGS_GUI.getString("title.new.categoria"));
 		paneNewCat = new NotificationPane();
 		
+		vtnNewPres = new Stage();
+		vtnNewPres.setMinWidth(380);
+		vtnNewPres.setMaxWidth(800);
+		vtnNewPres.setMinHeight(70);
+		vtnNewPres.setMaxHeight(120);
+		vtnNewPres.initModality(Modality.APPLICATION_MODAL);
+		vtnNewPres.setTitle(STRINGS_GUI.getString("title.new.presentacion"));
+		paneNewPres = new NotificationPane();
+		
 		FXMLLoader loaderNewProd = new FXMLLoader(getClass().getResource("/inventario/gui/NewProducto.fxml"),STRINGS_GUI);
 		FXMLLoader loaderNewCat = new FXMLLoader(getClass().getResource("/inventario/gui/NewCategoria.fxml"),STRINGS_GUI);
-		
+		FXMLLoader loaderNewPres = new FXMLLoader(getClass().getResource("/inventario/gui/NewPresentacion.fxml"),STRINGS_GUI);
 		try {
 			paneNewProd.setContent(loaderNewProd.load());
 			newProdCtrl = loaderNewProd.getController();
@@ -217,8 +252,13 @@ public class AdminInventarioController {
 			
 			paneNewCat.setContent(loaderNewCat.load());
 			newCatCtrl = loaderNewCat.getController();
-			vtnNewCat.setScene(new Scene(paneNewCat,350,85));
+			vtnNewCat.setScene(new Scene(paneNewCat,380,85));
 			newCatCtrl.setStage(vtnNewCat);
+			
+			paneNewPres.setContent(loaderNewPres.load());
+			newPresCtrl = loaderNewPres.getController();
+			vtnNewPres.setScene(new Scene(paneNewPres,380,85));
+			newPresCtrl.setStage(vtnNewPres);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -280,6 +320,15 @@ public class AdminInventarioController {
 				daoCategorias.getAll(0, 50)
 				.stream().map(cat->cat.toString()).collect(Collectors.toList()));
 		listCategorias.getSelectionModel().select(c);
+	}
+	
+	private void cargarPresentaciones(Producto prod) {
+		assert prod != null;
+		Presentacion p = tblPres.getSelectionModel().getSelectedItem();
+		tblPres.getSelectionModel().clearSelection();
+		tblPres.getItems().setAll(
+				daoPresProd.getAll(prod.getId(), 0, 50));
+		tblPres.getSelectionModel().select(p);
 	}
 	
 	private List<Producto> getProdDataScroll() {
@@ -345,6 +394,16 @@ public class AdminInventarioController {
 	}
 	
 	@FXML
+	private void onNuevaPresentacion(ActionEvent event) {
+		Producto prod = tblProds.getSelectionModel().getSelectedItem();
+		newPresCtrl.reset();
+		newPresCtrl.setProducto(prod);
+		vtnNewPres.centerOnScreen();
+		vtnNewPres.showAndWait();
+		cargarPresentaciones(prod);
+	}
+	
+	@FXML
 	private void onEliminarProducto(ActionEvent event) {
 		Producto prod = tblProds.getSelectionModel().getSelectedItem();
 		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
@@ -361,15 +420,9 @@ public class AdminInventarioController {
 				tblProds.getSelectionModel().clearSelection();
 				tblProds.getItems().remove(prod);
 			} catch (DBConnectionException | SQLException e) {
-				e.printStackTrace();
-				ERROR.setHeaderText(STRINGS_GUI.getString("error.conexion"));
-				ERROR.setContentText(e.getMessage());
-				ERROR.showAndWait();
+				Main.mostrarMensaje(e.getMessage());
 			} catch (CannotDeleteException e) {
-				e.printStackTrace();
-				ERROR.setHeaderText(STRINGS_GUI.getString("error.consulta"));
-				ERROR.setContentText(e.getMessage());
-				ERROR.showAndWait();
+				Main.mostrarMensaje(e.getMessage());
 			}finally {
 				if(con != null) {
 					try {
@@ -379,6 +432,26 @@ public class AdminInventarioController {
 							con.rollback();
 					} catch (SQLException e) {}
 				}
+			}
+		});
+	}
+	
+	@FXML
+	private void onEliminarPresentacion(ActionEvent event) {
+		Presentacion presentacion = tblPres.getSelectionModel().getSelectedItem();
+		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
+			try {
+				Producto prod = tblProds.getSelectionModel().getSelectedItem();
+				daoPresentaciones.delete(presentacion);
+				String msgExito = STRINGS_GUI.getString("msg.delete.presentacion");
+				Main.mostrarMensaje(msgExito.replaceAll("\\{\\{Pr\\}\\}", "\"" + presentacion.getNombre() + "\"")
+						.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre()  + "\""));
+				tblPres.getSelectionModel().clearSelection();
+				tblPres.getItems().remove(presentacion);
+			} catch (DBConnectionException e) {
+				Main.mostrarMensaje(e.getMessage());
+			} catch (CannotDeleteException e) {
+				Main.mostrarMensaje(e.getMessage());
 			}
 		});
 	}
@@ -461,6 +534,7 @@ public class AdminInventarioController {
 	@FXML
 	private void onPresentacionesContextMenuShown(WindowEvent event) {
 		boolean haySeleccion = tblPres.getSelectionModel().getSelectedItem() != null;
+		menuItemNewPresentacion.setDisable(tblProds.getSelectionModel().getSelectedItem() == null);
 		menuItemDesPresentacion.setDisable(!haySeleccion);
 		menuItemElPresentacion.setDisable(!haySeleccion);
 	}
@@ -468,6 +542,7 @@ public class AdminInventarioController {
 	@FXML
 	private void onLotesContextMenuShown(WindowEvent event) {
 		boolean haySeleccion = tblLotes.getSelectionModel().getSelectedItem() != null;
+		menuItemNewLote.setDisable(tblProds.getSelectionModel().getSelectedItem() == null);
 		menuItemDesLote.setDisable(!haySeleccion);
 		menuItemElLote.setDisable(!haySeleccion);
 	}
@@ -475,6 +550,8 @@ public class AdminInventarioController {
 	@FXML
 	private void onInventarioContextMenuShown(WindowEvent event) {
 		boolean haySeleccion = tblInv.getSelectionModel().getSelectedItem() != null;
+		menuItemNewInv.setDisable(tblPres.getSelectionModel().getSelectedItem() == null || 
+				tblLotes.getSelectionModel().getSelectedItem() == null);
 		menuItemDesInv.setDisable(!haySeleccion);
 		menuItemElInv.setDisable(!haySeleccion);
 	}

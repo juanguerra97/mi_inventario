@@ -130,7 +130,7 @@
                         </BorderPane>
                         <BorderPane maxWidth="350.0" minWidth="210.0">
                            <center>
-                              <TableView fx:id="tblPres" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tblPres" disable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="colNomPres" editable="false" prefWidth="75.0" text="%nombre" />
                                 </columns>
@@ -140,9 +140,9 @@
                                  <contextMenu>
                                     <ContextMenu onShown="#onPresentacionesContextMenuShown">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="%nueva" />
+                                          <MenuItem fx:id="menuItemNewPresentacion" mnemonicParsing="false" onAction="#onNuevaPresentacion" text="%nueva" />
                                           <MenuItem fx:id="menuItemDesPresentacion" mnemonicParsing="false" onAction="#onDeselectPresentacion" text="%deseleccionar" />
-                                          <MenuItem fx:id="menuItemElPresentacion" mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem fx:id="menuItemElPresentacion" mnemonicParsing="false" onAction="#onEliminarPresentacion" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -155,7 +155,7 @@
                      <items>
                         <BorderPane minWidth="320.0">
                            <center>
-                              <TableView fx:id="tblInv" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tblInv" disable="true" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="colLotInv" editable="false" maxWidth="300.0" minWidth="35.0" prefWidth="-1.0" text="%lote" />
                                   <TableColumn fx:id="colPresInv" editable="false" minWidth="80.0" prefWidth="-1.0" text="%presentacion" />
@@ -169,7 +169,7 @@
                                  <contextMenu>
                                     <ContextMenu onShown="#onInventarioContextMenuShown">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="%nuevo" />
+                                          <MenuItem fx:id="menuItemNewInv" mnemonicParsing="false" text="%nuevo" />
                                           <MenuItem fx:id="menuItemDesInv" mnemonicParsing="false" onAction="#onDeselectInventario" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElInv" mnemonicParsing="false" text="%eliminar" />
                                        </items>
@@ -180,7 +180,7 @@
                         </BorderPane>
                         <BorderPane maxWidth="350.0" minWidth="210.0">
                            <center>
-                              <TableView fx:id="tblLotes" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tblLotes" disable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="colNumLote" editable="false" maxWidth="3000.0" minWidth="75.0" prefWidth="-1.0" text="%numero" />
                                   <TableColumn fx:id="colFechaLote" editable="false" minWidth="100.0" prefWidth="-1.0" sortable="false" text="%fecha" />
@@ -191,7 +191,7 @@
                                  <contextMenu>
                                     <ContextMenu onShown="#onLotesContextMenuShown">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="%nuevo" />
+                                          <MenuItem fx:id="menuItemNewLote" mnemonicParsing="false" text="%nuevo" />
                                           <MenuItem fx:id="menuItemDesLote" mnemonicParsing="false" onAction="#onDeselectLote" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElLote" mnemonicParsing="false" text="%eliminar" />
                                        </items>
