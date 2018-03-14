@@ -13,6 +13,6 @@
    <children>
       <Label text="%nombre" />
       <CustomTextField fx:id="fieldNombre" promptText="%ingresar.nombre" HBox.hgrow="ALWAYS" />
-      <Button fx:id="btnGuardar" mnemonicParsing="false" text="%guardar" />
+      <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#onGuardar" text="%guardar" />
    </children>
 </HBox>
