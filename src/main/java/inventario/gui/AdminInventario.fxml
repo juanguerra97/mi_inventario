@@ -191,9 +191,9 @@
                                  <contextMenu>
                                     <ContextMenu onShown="#onLotesContextMenuShown">
                                        <items>
-                                          <MenuItem fx:id="menuItemNewLote" mnemonicParsing="false" text="%nuevo" />
+                                          <MenuItem fx:id="menuItemNewLote" mnemonicParsing="false" onAction="#onNuevoLote" text="%nuevo" />
                                           <MenuItem fx:id="menuItemDesLote" mnemonicParsing="false" onAction="#onDeselectLote" text="%deseleccionar" />
-                                          <MenuItem fx:id="menuItemElLote" mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem fx:id="menuItemElLote" mnemonicParsing="false" onAction="#onEliminarLote" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>

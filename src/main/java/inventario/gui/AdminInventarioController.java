@@ -19,6 +19,8 @@ import org.controlsfx.control.textfield.TextFields;
 
 import inventario.dao.DAOCategoria;
 import inventario.dao.DAOCategoriaProducto;
+import inventario.dao.DAOLote;
+import inventario.dao.DAOLoteProducto;
 import inventario.dao.DAOMarca;
 import inventario.dao.DAOPresentacion;
 import inventario.dao.DAOPresentacionProducto;
@@ -30,6 +32,8 @@ import inventario.dao.error.DBConnectionException;
 import inventario.dao.mysql.Conexion;
 import inventario.dao.mysql.DAOCategoriaMySQL;
 import inventario.dao.mysql.DAOCategoriaProductoMySQL;
+import inventario.dao.mysql.DAOLoteMySQL;
+import inventario.dao.mysql.DAOLoteProductoMySQL;
 import inventario.dao.mysql.DAOMarcaMySQL;
 import inventario.dao.mysql.DAOPresentacionMySQL;
 import inventario.dao.mysql.DAOPresentacionProductoMySQL;
@@ -124,12 +128,18 @@ public class AdminInventarioController {
 	private NotificationPane paneNewPres;
 	private NewPresentacionController newPresCtrl;
 	
+	private Stage vtnNewLote;
+	private NotificationPane paneNewLote;
+	private NewLoteController newLoteCtrl;
+	
 	private DAOProducto daoProds = null;
 	private DAOCategoriaProducto daoCatsProd = null;
 	private DAOMarca daoMarcas = null;
 	private DAOCategoria daoCategorias = null;
 	private DAOPresentacion daoPresentaciones = null;
 	private DAOPresentacionProducto daoPresProd = null;
+	private DAOLote daoLotes = null;
+	private DAOLoteProducto daoLotProd = null;
 	
 	FiltroProd filtroProductos = FiltroProd.NONE;
 	
@@ -149,6 +159,8 @@ public class AdminInventarioController {
 			daoCategorias = new DAOCategoriaMySQL(Conexion.get());
 			daoPresentaciones = new DAOPresentacionMySQL(Conexion.get());
 			daoPresProd = new DAOPresentacionProductoMySQL(Conexion.get());
+			daoLotes = new DAOLoteMySQL(Conexion.get());
+			daoLotProd = new DAOLoteProductoMySQL(Conexion.get());
 		} catch (DBConnectionException | SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -182,7 +194,7 @@ public class AdminInventarioController {
 			// se hace en otro hilo porque la tabla tiene que estar renderizada para poder
 			// obtener su ScrollBar
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -201,8 +213,10 @@ public class AdminInventarioController {
 			tblInv.setDisable(newIsNull);
 			if(newIsNull) {
 				tblPres.getItems().clear();
+				tblLotes.getItems().clear();
 			}else {
 				cargarPresentaciones(newValue);
+				cargarLotes(newValue);
 			}
 		});
 		
@@ -241,9 +255,19 @@ public class AdminInventarioController {
 		vtnNewPres.setTitle(STRINGS_GUI.getString("title.new.presentacion"));
 		paneNewPres = new NotificationPane();
 		
+		vtnNewLote = new Stage();
+		vtnNewLote.setMinWidth(350);
+		vtnNewLote.setMaxWidth(800);
+		vtnNewLote.setMinHeight(70);
+		vtnNewLote.setMaxHeight(200);
+		vtnNewLote.initModality(Modality.APPLICATION_MODAL);
+		vtnNewLote.setTitle(STRINGS_GUI.getString("title.new.lote"));
+		paneNewLote = new NotificationPane();
+		
 		FXMLLoader loaderNewProd = new FXMLLoader(getClass().getResource("/inventario/gui/NewProducto.fxml"),STRINGS_GUI);
 		FXMLLoader loaderNewCat = new FXMLLoader(getClass().getResource("/inventario/gui/NewCategoria.fxml"),STRINGS_GUI);
 		FXMLLoader loaderNewPres = new FXMLLoader(getClass().getResource("/inventario/gui/NewPresentacion.fxml"),STRINGS_GUI);
+		FXMLLoader loaderNewLote = new FXMLLoader(getClass().getResource("/inventario/gui/NewLote.fxml"),STRINGS_GUI);
 		try {
 			paneNewProd.setContent(loaderNewProd.load());
 			newProdCtrl = loaderNewProd.getController();
@@ -259,6 +283,11 @@ public class AdminInventarioController {
 			newPresCtrl = loaderNewPres.getController();
 			vtnNewPres.setScene(new Scene(paneNewPres,380,85));
 			newPresCtrl.setStage(vtnNewPres);
+			
+			paneNewLote.setContent(loaderNewLote.load());
+			newLoteCtrl = loaderNewLote.getController();
+			vtnNewLote.setScene(new Scene(paneNewLote,350,120));
+			newLoteCtrl.setStage(vtnNewLote);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -329,6 +358,15 @@ public class AdminInventarioController {
 		tblPres.getItems().setAll(
 				daoPresProd.getAll(prod.getId(), 0, 50));
 		tblPres.getSelectionModel().select(p);
+	}
+	
+	private void cargarLotes(Producto prod) {
+		assert prod != null;
+		Lote l = tblLotes.getSelectionModel().getSelectedItem();
+		tblLotes.getSelectionModel().clearSelection();
+		tblLotes.getItems().setAll(
+				daoLotProd.getAll(prod.getId(), 0, 50));
+		tblLotes.getSelectionModel().select(l);
 	}
 	
 	private List<Producto> getProdDataScroll() {
@@ -404,6 +442,16 @@ public class AdminInventarioController {
 	}
 	
 	@FXML
+	private void onNuevoLote(ActionEvent event) {
+		Producto prod = tblProds.getSelectionModel().getSelectedItem();
+		newLoteCtrl.reset();
+		newLoteCtrl.setProducto(prod);
+		vtnNewLote.centerOnScreen();
+		vtnNewLote.showAndWait();
+		cargarLotes(prod);
+	}
+	
+	@FXML
 	private void onEliminarProducto(ActionEvent event) {
 		Producto prod = tblProds.getSelectionModel().getSelectedItem();
 		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
@@ -448,6 +496,26 @@ public class AdminInventarioController {
 						.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre()  + "\""));
 				tblPres.getSelectionModel().clearSelection();
 				tblPres.getItems().remove(presentacion);
+			} catch (DBConnectionException e) {
+				Main.mostrarMensaje(e.getMessage());
+			} catch (CannotDeleteException e) {
+				Main.mostrarMensaje(e.getMessage());
+			}
+		});
+	}
+	
+	@FXML
+	private void onEliminarLote(ActionEvent event) {
+		Lote lote = tblLotes.getSelectionModel().getSelectedItem();
+		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
+			try {
+				Producto prod = tblProds.getSelectionModel().getSelectedItem();
+				daoLotes.delete(lote);
+				String msgExito = STRINGS_GUI.getString("msg.delete.lote");
+				msgExito = msgExito.replaceAll("\\{\\{L\\}\\}", "\"" + lote.getNumero() + "\"");
+				Main.mostrarMensaje(msgExito.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre() + "\""));
+				tblLotes.getSelectionModel().clearSelection();
+				tblLotes.getItems().remove(lote);
 			} catch (DBConnectionException e) {
 				Main.mostrarMensaje(e.getMessage());
 			} catch (CannotDeleteException e) {
