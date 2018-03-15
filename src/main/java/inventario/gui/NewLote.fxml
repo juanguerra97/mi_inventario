@@ -11,8 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-
-<VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0" spacing="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141">
+<VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventario.gui.NewLoteController">
    <children>
       <GridPane hgap="5.0" vgap="5.0">
         <columnConstraints>
@@ -42,7 +41,7 @@
             <DatePicker fx:id="datePicker" editable="false" maxWidth="1.7976931348623157E308" promptText="%select.fecha_ven" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="btnGuardar" mnemonicParsing="false" text="%guardar">
+      <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#onGuardar" text="%guardar">
          <font>
             <Font size="13.0" />
          </font>
