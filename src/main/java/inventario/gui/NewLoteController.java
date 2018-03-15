@@ -42,7 +42,6 @@ public class NewLoteController {
 		
 		Fields.setupClearButtonField(fieldNumero);
 		fieldNumero.setOnAction(e -> datePicker.requestFocus());	
-		datePicker.setOnAction(e -> onGuardar(e));
 		
 	}
 	
