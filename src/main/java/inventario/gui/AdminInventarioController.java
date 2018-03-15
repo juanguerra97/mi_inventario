@@ -203,6 +203,14 @@ public class AdminInventarioController {
 			LoadData.<String>loadOnScroll(listMarcas, 
 					()->daoMarcas.getAll(listMarcas.getItems().size(), 
 				    STEP));
+			LoadData.<Presentacion>loadOnScroll(tblPres, 
+					()->daoPresProd.getAll(
+							tblProds.getSelectionModel().getSelectedItem().getId(), 
+							tblPres.getItems().size(), STEP));
+			LoadData.<Lote>loadOnScroll(tblLotes, 
+					()->daoLotProd.getAll(
+							tblProds.getSelectionModel().getSelectedItem().getId(), 
+							tblLotes.getItems().size(), STEP));
 		});
 		executor.shutdown();
 		
