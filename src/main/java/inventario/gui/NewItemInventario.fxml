@@ -11,8 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-
-<VBox alignment="CENTER" prefHeight="175.0" prefWidth="350.0" spacing="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141">
+<VBox alignment="CENTER" prefHeight="175.0" prefWidth="350.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="inventario.gui.NewItemInventarioController">
    <children>
       <GridPane hgap="5.0" vgap="5.0">
         <columnConstraints>
@@ -59,7 +58,7 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" spacing="5.0">
          <children>
-            <Button fx:id="btnGuardar" mnemonicParsing="false" text="%guardar">
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#onGuardar" text="%guardar">
                <font>
                   <Font size="13.0" />
                </font>
