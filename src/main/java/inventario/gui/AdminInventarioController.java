@@ -23,6 +23,7 @@ import inventario.dao.DAOLote;
 import inventario.dao.DAOLoteProducto;
 import inventario.dao.DAOMarca;
 import inventario.dao.DAOPresentacion;
+import inventario.dao.DAOPresentacionLote;
 import inventario.dao.DAOPresentacionProducto;
 import inventario.dao.DAOProducto;
 import inventario.dao.error.CannotDeleteException;
@@ -35,6 +36,7 @@ import inventario.dao.mysql.DAOCategoriaProductoMySQL;
 import inventario.dao.mysql.DAOLoteMySQL;
 import inventario.dao.mysql.DAOLoteProductoMySQL;
 import inventario.dao.mysql.DAOMarcaMySQL;
+import inventario.dao.mysql.DAOPresentacionLoteMySQL;
 import inventario.dao.mysql.DAOPresentacionMySQL;
 import inventario.dao.mysql.DAOPresentacionProductoMySQL;
 import inventario.dao.mysql.DAOProductoMySQL;
@@ -140,6 +142,7 @@ public class AdminInventarioController {
 	private DAOPresentacionProducto daoPresProd = null;
 	private DAOLote daoLotes = null;
 	private DAOLoteProducto daoLotProd = null;
+	private DAOPresentacionLote daoInventario = null;
 	
 	FiltroProd filtroProductos = FiltroProd.NONE;
 	
@@ -161,6 +164,7 @@ public class AdminInventarioController {
 			daoPresProd = new DAOPresentacionProductoMySQL(Conexion.get());
 			daoLotes = new DAOLoteMySQL(Conexion.get());
 			daoLotProd = new DAOLoteProductoMySQL(Conexion.get());
+			daoInventario = new DAOPresentacionLoteMySQL(Conexion.get());
 		} catch (DBConnectionException | SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -222,9 +226,11 @@ public class AdminInventarioController {
 			if(newIsNull) {
 				tblPres.getItems().clear();
 				tblLotes.getItems().clear();
+				tblInv.getItems().clear();
 			}else {
 				cargarPresentaciones(newValue);
 				cargarLotes(newValue);
+				cargarInventario(newValue);
 			}
 		});
 		
@@ -377,6 +383,14 @@ public class AdminInventarioController {
 		tblLotes.getSelectionModel().select(l);
 	}
 	
+	private void cargarInventario(Producto prod) {
+		assert prod != null;
+		PresentacionLote pl = tblInv.getSelectionModel().getSelectedItem();
+		tblInv.getSelectionModel().clearSelection();
+		tblInv.getItems().setAll(daoInventario.getAll(prod.getId(),0,50));
+		tblInv.getSelectionModel().select(pl);
+	}
+	
 	private List<Producto> getProdDataScroll() {
 		List<Producto> prods = new LinkedList<>();
 		List<Producto> items = tblProds.getItems();
@@ -524,6 +538,25 @@ public class AdminInventarioController {
 				Main.mostrarMensaje(msgExito.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre() + "\""));
 				tblLotes.getSelectionModel().clearSelection();
 				tblLotes.getItems().remove(lote);
+			} catch (DBConnectionException e) {
+				Main.mostrarMensaje(e.getMessage());
+			} catch (CannotDeleteException e) {
+				Main.mostrarMensaje(e.getMessage());
+			}
+		});
+	}
+	
+	@FXML
+	private void onEliminarItemInventario(ActionEvent event) {
+		PresentacionLote stock = tblInv.getSelectionModel().getSelectedItem();
+		CONFIRM.showAndWait().filter(response -> response.equals(BTN_ELIMINAR)).ifPresent(response->{
+			try {
+				Producto prod = tblProds.getSelectionModel().getSelectedItem();
+				daoInventario.delete(stock);
+				Main.mostrarMensaje(STRINGS_GUI.getString("msg.delete.stock")
+						.replaceAll("\\{\\{P\\}\\}", "\"" + prod.getNombre() + "\""));
+				tblInv.getSelectionModel().clearSelection();
+				tblInv.getItems().remove(stock);
 			} catch (DBConnectionException e) {
 				Main.mostrarMensaje(e.getMessage());
 			} catch (CannotDeleteException e) {

@@ -171,7 +171,7 @@
                                        <items>
                                           <MenuItem fx:id="menuItemNewInv" mnemonicParsing="false" text="%nuevo" />
                                           <MenuItem fx:id="menuItemDesInv" mnemonicParsing="false" onAction="#onDeselectInventario" text="%deseleccionar" />
-                                          <MenuItem fx:id="menuItemElInv" mnemonicParsing="false" text="%eliminar" />
+                                          <MenuItem fx:id="menuItemElInv" mnemonicParsing="false" onAction="#onEliminarItemInventario" text="%eliminar" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
