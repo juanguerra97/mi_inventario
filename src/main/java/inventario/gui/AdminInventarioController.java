@@ -130,6 +130,10 @@ public class AdminInventarioController {
 	private NotificationPane paneNewPres;
 	private NewPresentacionController newPresCtrl;
 	
+	private Stage vtnNewInv;
+	private NotificationPane paneNewInv;
+	private NewItemInventarioController newInvCtrl;
+	
 	private Stage vtnNewLote;
 	private NotificationPane paneNewLote;
 	private NewLoteController newLoteCtrl;
@@ -278,10 +282,21 @@ public class AdminInventarioController {
 		vtnNewLote.setTitle(STRINGS_GUI.getString("title.new.lote"));
 		paneNewLote = new NotificationPane();
 		
+		vtnNewInv = new Stage();
+		vtnNewInv.setMinWidth(350);
+		vtnNewInv.setMaxWidth(800);
+		vtnNewInv.setMinHeight(160);
+		vtnNewInv.setMaxHeight(200);
+		vtnNewInv.initModality(Modality.APPLICATION_MODAL);
+		vtnNewInv.setTitle(STRINGS_GUI.getString("title.new.iteminv"));
+		paneNewInv = new NotificationPane();
+		
 		FXMLLoader loaderNewProd = new FXMLLoader(getClass().getResource("/inventario/gui/NewProducto.fxml"),STRINGS_GUI);
 		FXMLLoader loaderNewCat = new FXMLLoader(getClass().getResource("/inventario/gui/NewCategoria.fxml"),STRINGS_GUI);
 		FXMLLoader loaderNewPres = new FXMLLoader(getClass().getResource("/inventario/gui/NewPresentacion.fxml"),STRINGS_GUI);
 		FXMLLoader loaderNewLote = new FXMLLoader(getClass().getResource("/inventario/gui/NewLote.fxml"),STRINGS_GUI);
+		FXMLLoader loaderNewInv = new FXMLLoader(getClass().getResource("/inventario/gui/NewItemInventario.fxml"),STRINGS_GUI);
+		
 		try {
 			paneNewProd.setContent(loaderNewProd.load());
 			newProdCtrl = loaderNewProd.getController();
@@ -302,6 +317,11 @@ public class AdminInventarioController {
 			newLoteCtrl = loaderNewLote.getController();
 			vtnNewLote.setScene(new Scene(paneNewLote,350,120));
 			newLoteCtrl.setStage(vtnNewLote);
+			
+			paneNewInv.setContent(loaderNewInv.load());
+			newInvCtrl = loaderNewInv.getController();
+			vtnNewInv.setScene(new Scene(paneNewInv,350,175));
+			newInvCtrl.setStage(vtnNewInv);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -471,6 +491,17 @@ public class AdminInventarioController {
 		vtnNewLote.centerOnScreen();
 		vtnNewLote.showAndWait();
 		cargarLotes(prod);
+	}
+	
+	@FXML
+	private void onNuevoItemInventario(ActionEvent event) {
+		newInvCtrl.reset();
+		newInvCtrl.setPresentacionLote(
+				tblPres.getSelectionModel().getSelectedItem(), 
+				tblLotes.getSelectionModel().getSelectedItem());
+		vtnNewInv.centerOnScreen();
+		vtnNewInv.showAndWait();
+		cargarInventario(tblProds.getSelectionModel().getSelectedItem());
 	}
 	
 	@FXML

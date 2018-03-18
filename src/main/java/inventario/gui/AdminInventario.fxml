@@ -169,7 +169,7 @@
                                  <contextMenu>
                                     <ContextMenu onShown="#onInventarioContextMenuShown">
                                        <items>
-                                          <MenuItem fx:id="menuItemNewInv" mnemonicParsing="false" text="%nuevo" />
+                                          <MenuItem fx:id="menuItemNewInv" mnemonicParsing="false" onAction="#onNuevoItemInventario" text="%nuevo" />
                                           <MenuItem fx:id="menuItemDesInv" mnemonicParsing="false" onAction="#onDeselectInventario" text="%deseleccionar" />
                                           <MenuItem fx:id="menuItemElInv" mnemonicParsing="false" onAction="#onEliminarItemInventario" text="%eliminar" />
                                        </items>
