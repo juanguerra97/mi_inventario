@@ -618,16 +618,24 @@ public class AdminInventarioController {
 	private void onProductosContextMenuShown(WindowEvent event) {
 		Producto prod = tblProds.getSelectionModel().getSelectedItem();
 		boolean haySeleccion = prod != null;
+		boolean hayMarcas = !listMarcas.getItems().isEmpty();
+		boolean hayCategorias = !listCategorias.getItems().isEmpty();
 		
 		menuItemDesProd.setDisable(!haySeleccion);
+		menuItemDesProd.setVisible(haySeleccion);
 		menuItemElProd.setDisable(!haySeleccion);
+		menuItemElProd.setVisible(haySeleccion);
 		
-		checkFiltrarProdsMarca.setDisable(listMarcas.getItems().isEmpty());
-		checkFiltrarProdsCategoria.setDisable(listCategorias.getItems().isEmpty());
+		checkFiltrarProdsMarca.setDisable(!hayMarcas);
+		checkFiltrarProdsMarca.setVisible(hayMarcas);
+		checkFiltrarProdsCategoria.setDisable(!hayCategorias);
+		checkFiltrarProdsCategoria.setVisible(hayCategorias);
 		
 		String categoria = listCategorias.getSelectionModel().getSelectedItem();
 		if(categoria == null) {
+			menuItemAnadirCat.setDisable(true);
 			menuItemAnadirCat.setVisible(false);
+			menuItemQuitCategoria.setDisable(true);
 			menuItemQuitCategoria.setVisible(false);
 			return;
 		}
@@ -661,39 +669,54 @@ public class AdminInventarioController {
 	
 	@FXML
 	private void onMarcasContextMenuShown(WindowEvent event) {
-		menuItemDesMarca.setDisable(listMarcas.getSelectionModel().getSelectedItem() == null);
+		boolean haySeleccion = listMarcas.getSelectionModel().getSelectedItem() != null;
+		menuItemDesMarca.setDisable(!haySeleccion);
+		menuItemDesMarca.setVisible(haySeleccion);
 	}
 	
 	@FXML
 	private void onCategoriasContextMenuShown(WindowEvent event) {
 		boolean catIsNull = listCategorias.getSelectionModel().getSelectedItem() == null;
 		menuItemDesCategoria.setDisable(catIsNull);
+		menuItemDesCategoria.setVisible(!catIsNull);
 		menuItemElCategoria.setDisable(catIsNull);
+		menuItemElCategoria.setVisible(!catIsNull);
 	}
 	
 	@FXML
 	private void onPresentacionesContextMenuShown(WindowEvent event) {
+		boolean haySelProd = tblProds.getSelectionModel().getSelectedItem() != null;
 		boolean haySeleccion = tblPres.getSelectionModel().getSelectedItem() != null;
-		menuItemNewPresentacion.setDisable(tblProds.getSelectionModel().getSelectedItem() == null);
+		menuItemNewPresentacion.setDisable(!haySelProd);
+		menuItemNewPresentacion.setVisible(haySelProd);
 		menuItemDesPresentacion.setDisable(!haySeleccion);
+		menuItemDesPresentacion.setVisible(haySeleccion);
 		menuItemElPresentacion.setDisable(!haySeleccion);
+		menuItemElPresentacion.setVisible(haySeleccion);
 	}
 	
 	@FXML
 	private void onLotesContextMenuShown(WindowEvent event) {
+		boolean haySelProd = tblProds.getSelectionModel().getSelectedItem() != null;
 		boolean haySeleccion = tblLotes.getSelectionModel().getSelectedItem() != null;
-		menuItemNewLote.setDisable(tblProds.getSelectionModel().getSelectedItem() == null);
+		menuItemNewLote.setDisable(!haySelProd);
 		menuItemDesLote.setDisable(!haySeleccion);
+		menuItemDesLote.setVisible(haySeleccion);
 		menuItemElLote.setDisable(!haySeleccion);
+		menuItemElLote.setVisible(haySeleccion);
 	}
 	
 	@FXML
 	private void onInventarioContextMenuShown(WindowEvent event) {
+		boolean haySelLote = tblLotes.getSelectionModel().getSelectedItem() != null;
+		boolean haySelPres = tblPres.getSelectionModel().getSelectedItem() != null;
 		boolean haySeleccion = tblInv.getSelectionModel().getSelectedItem() != null;
-		menuItemNewInv.setDisable(tblPres.getSelectionModel().getSelectedItem() == null || 
-				tblLotes.getSelectionModel().getSelectedItem() == null);
+		menuItemNewInv.setDisable(!haySelPres || !haySelLote);
+		menuItemNewInv.setVisible(haySelPres && haySelLote);
 		menuItemDesInv.setDisable(!haySeleccion);
+		menuItemDesInv.setVisible(haySeleccion);
 		menuItemElInv.setDisable(!haySeleccion);
+		menuItemElInv.setVisible(haySeleccion);
 	}
 	
 	@FXML
