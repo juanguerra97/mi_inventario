@@ -8,6 +8,16 @@ package inventario.gui;
 public class Idioma {
 	
 	private String idioma,locale;
+	
+	/**
+	 * Constructor
+	 * @param idioma nombre completo del idioma, no debe ser null
+	 * @param locale codigo de localizacion del idioma, no debe ser null
+	 */
+	public Idioma(String idioma, String locale) {
+		setIdioma(idioma);
+		setLocale(locale);
+	}
 
 	/**
 	 * Devuelve el nombre del idioma
