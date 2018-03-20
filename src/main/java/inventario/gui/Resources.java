@@ -10,6 +10,8 @@ public class Resources {
 	 */
 	public static final ResourceBundle STRINGS_GUI = ResourceBundle.getBundle("strings/strings_gui", Locale.getDefault());
 	
+	public static final ResourceBundle STRINGS_SETTINGS = ResourceBundle.getBundle("strings/strings_settings", Locale.getDefault());
+	
 	private Resources() {}
 
 }
