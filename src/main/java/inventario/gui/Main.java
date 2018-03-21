@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import org.controlsfx.control.NotificationPane;
 
 import inventario.dao.mysql.Conexion;
+import inventario.files.ProgramFiles;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -34,6 +35,11 @@ public class Main extends Application {
 	 * Ventana para mostrar mensajes con informacion
 	 */
 	public static Alert INFO = new Alert(AlertType.INFORMATION,"",new ButtonType(STRINGS_GUI.getString("entendido")));
+	
+	/**
+	 * Configuracion del programa
+	 */
+	public static final Configuracion SETTINGS = ProgramFiles.getSettings();
 	
 	private static NotificationPane root = new NotificationPane();
 	
