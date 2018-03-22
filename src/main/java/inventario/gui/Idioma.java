@@ -1,11 +1,15 @@
 package inventario.gui;
 
+import java.io.Serializable;
+
 /**
  * Clase para guardar informacion sobre un idioma
  * @author juang
  *
  */
-public class Idioma {
+public class Idioma implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	private String idioma,locale;
 	
