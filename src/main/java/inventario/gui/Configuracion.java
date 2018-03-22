@@ -2,6 +2,7 @@ package inventario.gui;
 
 import static inventario.gui.Resources.STRINGS_SETTINGS;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,8 +12,10 @@ import java.util.stream.Collectors;
  * @author juang
  *
  */
-public class Configuracion {
-	
+public class Configuracion implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Lista de idiomas soportados
 	 */
@@ -184,7 +187,7 @@ public class Configuracion {
 	 * debe ser negativo
 	 */
 	public void setTiempo(int tiempo) {
-		if(tiempo <= 0)
+		if(tiempo < 0)
 			throw new IllegalArgumentException(
 					STRINGS_SETTINGS.getString("error.tiempo.negativo"));
 		this.tiempo = tiempo;
