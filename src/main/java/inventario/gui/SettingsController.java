@@ -1,7 +1,9 @@
 package inventario.gui;
 
 import static inventario.gui.Main.SETTINGS;
-
+import static inventario.gui.Resources.STRINGS_SETTINGS;
+import inventario.files.ProgramFiles;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -32,12 +34,57 @@ public class SettingsController {
 	
 	@FXML
 	private void initialize() {
+		
 		choiceBoxIdioma.getItems().setAll(Configuracion.IDIOMAS);
 		choiceBoxScalaTiempo.getItems().setAll(Configuracion.ESCALAS_TIEMPO);
+		
 		SpinnerValueFactory<Integer> spinValueFactory = 
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 500, 0);
 		spinnerTiempoVencimiento.setValueFactory(spinValueFactory);
+		
+		
+		checkMostrarProductosPorVencer.selectedProperty().addListener((o,oldValue,newValue)->{
+			choiceBoxScalaTiempo.setDisable(!newValue);
+			spinnerTiempoVencimiento.setDisable(!newValue);
+			if(newValue) {
+				choiceBoxScalaTiempo.getSelectionModel().select(SETTINGS.getEscalaTiempo());
+				spinnerTiempoVencimiento.getValueFactory().setValue(SETTINGS.getTiempo());
+			}
+		});
+		
 		cargar();
+	}
+	
+	@FXML
+	private void onGuardar(ActionEvent event) {
+		
+		SETTINGS.setCapitalizarNombresProductos(checkNombresProductos.isSelected());
+		SETTINGS.setCapitalizarMarcasProductos(checkMarcasProductos.isSelected());
+		SETTINGS.setCapitalizarNombresCategorias(checkNombresCategorias.isSelected());
+		SETTINGS.setCapitalizarNombresPresentaciones(checkNombresPresentaciones.isSelected());
+		
+		SETTINGS.setIdioma(choiceBoxIdioma.getValue());
+		
+		SETTINGS.setMostrarProductosPorVencer(checkMostrarProductosPorVencer.isSelected());
+		SETTINGS.setEscalaTiempo(choiceBoxScalaTiempo.getValue());
+		SETTINGS.setTiempo(spinnerTiempoVencimiento.getValueFactory().getValue());
+		
+		ProgramFiles.saveSettings(SETTINGS);
+		
+		Main.mostrarMensaje(STRINGS_SETTINGS.getString("msg.guardado"));
+		
+	}
+	
+	@FXML
+	private void onRestablecerPredeterminados(ActionEvent event) {
+		
+		SETTINGS.reset();
+		
+		ProgramFiles.saveSettings(SETTINGS);
+		cargar();
+		
+		Main.mostrarMensaje(STRINGS_SETTINGS.getString("msg.restablecido"));
+		
 	}
 	
 	/**
