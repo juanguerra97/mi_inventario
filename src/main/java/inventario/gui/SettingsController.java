@@ -1,11 +1,13 @@
 package inventario.gui;
 
+import static inventario.gui.Main.SETTINGS;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
-import static inventario.gui.Main.SETTINGS;
+import javafx.scene.control.SpinnerValueFactory;
 
 /**
  * Manejador de eventos de la interfaz SettingsView.fxml
@@ -32,6 +34,9 @@ public class SettingsController {
 	private void initialize() {
 		choiceBoxIdioma.getItems().setAll(Configuracion.IDIOMAS);
 		choiceBoxScalaTiempo.getItems().setAll(Configuracion.ESCALAS_TIEMPO);
+		SpinnerValueFactory<Integer> spinValueFactory = 
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 500, 0);
+		spinnerTiempoVencimiento.setValueFactory(spinValueFactory);
 		cargar();
 	}
 	
