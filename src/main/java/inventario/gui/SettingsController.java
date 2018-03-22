@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
+import static inventario.gui.Main.SETTINGS;
 
 /**
  * Manejador de eventos de la interfaz SettingsView.fxml
@@ -25,6 +26,31 @@ public class SettingsController {
 	
 	@FXML private CheckBox checkMostrarProductosPorVencer;
 	@FXML private Spinner<Integer> spinnerTiempoVencimiento;
-	@FXML private ChoiceBox<String> choiceBoxeScalaTiempo;
+	@FXML private ChoiceBox<String> choiceBoxScalaTiempo;
+	
+	@FXML
+	private void initialize() {
+		choiceBoxIdioma.getItems().setAll(Configuracion.IDIOMAS);
+		choiceBoxScalaTiempo.getItems().setAll(Configuracion.ESCALAS_TIEMPO);
+		cargar();
+	}
+	
+	/**
+	 * Metodo para cargar la configuracion en la interfaz
+	 */
+	public void cargar() {
+		
+		checkNombresProductos.setSelected(SETTINGS.getCapitalizarNombresProductos());
+		checkMarcasProductos.setSelected(SETTINGS.getCapitalizarMarcasProductos());
+		checkNombresCategorias.setSelected(SETTINGS.getCapitalizarNombresCategorias());
+		checkNombresPresentaciones.setSelected(SETTINGS.getCapitalizarNombresPresentaciones());
+		
+		choiceBoxIdioma.getSelectionModel().select(SETTINGS.getIdioma());
+		
+		checkMostrarProductosPorVencer.setSelected(SETTINGS.getMostrarProductosPorVencer());
+		choiceBoxScalaTiempo.getSelectionModel().select(SETTINGS.getEscalaTiempo());
+		spinnerTiempoVencimiento.getValueFactory().setValue(SETTINGS.getTiempo());
+		
+	}
 	
 }

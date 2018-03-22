@@ -101,7 +101,7 @@
                            </font>
                         </Label>
                         <Spinner fx:id="spinnerTiempoVencimiento" disable="true" />
-                        <ChoiceBox fx:id="choiceBoxeScalaTiempo" disable="true" minWidth="100.0" />
+                        <ChoiceBox fx:id="choiceBoxScalaTiempo" disable="true" minWidth="100.0" />
                      </children>
                   </HBox>
                </children>
