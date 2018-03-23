@@ -2,7 +2,7 @@ package inventario.gui;
 
 import static inventario.gui.Main.ERROR;
 import static inventario.gui.Resources.STRINGS_GUI;
-
+import static inventario.gui.Main.SETTINGS;
 import java.sql.SQLException;
 
 import org.controlsfx.control.textfield.CustomTextField;
@@ -61,7 +61,8 @@ public class NewPresentacionController {
 	@FXML
 	private void onGuardar(ActionEvent event) {
 		String nombre = fieldNombre.getText().trim();
-		nombre = nombre.toUpperCase();
+		if(SETTINGS.getCapitalizarNombresPresentaciones())
+			nombre = nombre.toUpperCase();
 		try {
 			Presentacion nueva = new Presentacion(producto.getId(), nombre);
 			daoPresentacion.insert(nueva);

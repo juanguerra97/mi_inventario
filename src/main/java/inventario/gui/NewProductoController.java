@@ -2,7 +2,7 @@ package inventario.gui;
 
 import static inventario.gui.Main.ERROR;
 import static inventario.gui.Resources.STRINGS_GUI;
-
+import static inventario.gui.Main.SETTINGS;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -135,10 +135,12 @@ public class NewProductoController {
 	private Producto validar() throws ModelConstraintViolationException, EmptyArgumentException {
 		try {
 			long id = Long.parseLong(fieldId.getText().trim());
-			String nombre = fieldNombre.getText();
-			String marca = fieldMarca.getText();
-			nombre = nombre.trim().toUpperCase();
-			marca = marca.trim().toUpperCase();
+			String nombre = fieldNombre.getText().trim();
+			String marca = fieldMarca.getText().trim();
+			if(SETTINGS.getCapitalizarNombresProductos())
+				nombre = nombre.toUpperCase();
+			if(SETTINGS.getCapitalizarMarcasProductos())
+				marca = marca.toUpperCase();
 			return new Producto(id,nombre,marca);
 		}catch(NumberFormatException e) {
 			throw new IllegalArgumentException(STRINGS_GUI.getString("error.id"));

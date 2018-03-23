@@ -2,7 +2,7 @@ package inventario.gui;
 
 import static inventario.gui.Main.ERROR;
 import static inventario.gui.Resources.STRINGS_GUI;
-
+import static inventario.gui.Main.SETTINGS;
 import java.sql.SQLException;
 
 import org.controlsfx.control.textfield.CustomTextField;
@@ -48,7 +48,8 @@ public class NewCategoriaController {
 	@FXML
 	private void onGuardar(ActionEvent event) {
 		String nombre = fieldNombre.getText().trim();
-		nombre = nombre.toUpperCase();
+		if(SETTINGS.getCapitalizarNombresCategorias())
+			nombre = nombre.toUpperCase();
 		try {
 			Categoria nueva = new Categoria(nombre);
 			daoCats.insert(nueva);
