@@ -2,6 +2,9 @@ package inventario.gui;
 
 import static inventario.gui.Main.SETTINGS;
 import static inventario.gui.Resources.STRINGS_SETTINGS;
+
+import java.util.Locale;
+
 import inventario.files.ProgramFiles;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -70,6 +73,7 @@ public class SettingsController {
 		SETTINGS.setTiempo(spinnerTiempoVencimiento.getValueFactory().getValue());
 		
 		ProgramFiles.saveSettings(SETTINGS);
+		ProgramFiles.saveLocale(new Locale(SETTINGS.getIdioma().getLocale()));
 		
 		Main.mostrarMensaje(STRINGS_SETTINGS.getString("msg.guardado"));
 		
@@ -81,6 +85,7 @@ public class SettingsController {
 		SETTINGS.reset();
 		
 		ProgramFiles.saveSettings(SETTINGS);
+		ProgramFiles.saveLocale(new Locale(SETTINGS.getIdioma().getLocale()));
 		cargar();
 		
 		Main.mostrarMensaje(STRINGS_SETTINGS.getString("msg.restablecido"));

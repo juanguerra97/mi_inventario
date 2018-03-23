@@ -27,6 +27,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	
 	/**
+	 * Configuracion del programa
+	 */
+	public static final Configuracion SETTINGS = ProgramFiles.getSettings();
+	
+	/**
 	 * Ventana para mostrar mensajes de error
 	 */
 	public static Alert ERROR = new Alert(AlertType.ERROR,"",new ButtonType(STRINGS_GUI.getString("entendido")));
@@ -35,11 +40,6 @@ public class Main extends Application {
 	 * Ventana para mostrar mensajes con informacion
 	 */
 	public static Alert INFO = new Alert(AlertType.INFORMATION,"",new ButtonType(STRINGS_GUI.getString("entendido")));
-	
-	/**
-	 * Configuracion del programa
-	 */
-	public static final Configuracion SETTINGS = ProgramFiles.getSettings();
 	
 	private static NotificationPane root = new NotificationPane();
 	

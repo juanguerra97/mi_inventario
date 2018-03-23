@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 import inventario.gui.Configuracion;
 
@@ -30,6 +31,11 @@ public class ProgramFiles {
 	 * Ruta al archivo de configuracion
 	 */
 	public static final Path SETTINGS_FILE = Paths.get(PROGRAM_DIR.toString(), "settings.set");
+	
+	/**
+	 * Ruta al objeto locale con la configuracion de idioma
+	 */
+	public static final Path LOCALE_FILE = Paths.get(PROGRAM_DIR.toString(),"locale.set");
 	
 	// bloque para crear el directorio del programa
 	static {
@@ -67,6 +73,37 @@ public class ProgramFiles {
 		try(ObjectOutputStream output = 
 				new ObjectOutputStream(Files.newOutputStream(SETTINGS_FILE))){
 			output.writeObject(config);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Metodo para obtener la configuracion de idioma
+	 * @return configuracion de idioma
+	 */
+	public static Locale getLocale() {
+		if(!Files.exists(LOCALE_FILE))
+			return Locale.getDefault();
+		Locale locale = null;
+		try(ObjectInputStream input = 
+				new ObjectInputStream(Files.newInputStream(LOCALE_FILE))){
+			locale = (Locale) input.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return locale;
+	}
+	
+	/**
+	 * Metodo para guardar locale
+	 * @param locale locale, no debe ser null
+	 */
+	public static void saveLocale(Locale locale) {
+		assert locale != null;
+		try(ObjectOutputStream output = 
+				new ObjectOutputStream(Files.newOutputStream(LOCALE_FILE))){
+			output.writeObject(locale);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
